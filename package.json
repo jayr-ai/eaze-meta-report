@@ -1,0 +1,13 @@
+{
+  "name": "eaze-account-2-report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Eaze Account 2 Meta Ads paid media report, served as static HTML.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Funding Solutions · Paid Media Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F172A; --blue:#3B82F6; --paper:#ffffff; --paper2:#F8FAFC;
+    --muted:#64748B; --faint:#94A3B8; --line:#E2E8F0; --line2:#EEF2F7;
+    --good:#16A34A; --warn:#D97706; --bad:#DC2626;
+    --sidebar:264px; --maxw:800px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  .sidebar{
+    position:fixed; top:0; left:0; width:var(--sidebar); height:100vh;
+    border-right:1px solid var(--line); background:var(--paper2);
+    padding:30px 22px; overflow-y:auto;
+  }
+  .brand{font-size:19px; font-weight:700; letter-spacing:-0.02em; line-height:1.2;}
+  .brand .b{color:var(--blue);}
+  .brand-sub{font-size:12.5px; color:var(--muted); margin-top:3px; letter-spacing:.01em;}
+  .navgroup{margin-top:26px;}
+  .navgroup h4{font-size:10.5px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:0 0 9px 0;}
+  .navlink{display:flex; gap:10px; align-items:baseline; padding:5px 8px; border-radius:7px; font-size:13.5px; color:#334155; margin-left:-8px; border-left:2px solid transparent;}
+  .navlink .n{font-size:11px; color:var(--faint); font-variant-numeric:tabular-nums; min-width:16px;}
+  .navlink:hover{background:#EEF3FB;}
+  .navlink:hover .n{color:var(--blue);}
+  main{margin-left:var(--sidebar); padding:0;}
+  .wrap{max-width:880px; margin:0; padding:56px 56px 120px;}
+  .eyebrow{font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); margin-bottom:18px;}
+  h1.display{font-size:54px; font-weight:300; letter-spacing:-0.025em; line-height:1.04; margin:0 0 22px;}
+  h1.display .b{color:var(--blue);}
+  .lead{font-size:14.5px; color:#334155; max-width:72ch; font-weight:400;}
+  .pills{display:flex; flex-wrap:wrap; gap:10px; margin:26px 0 6px;}
+  .pill{border:1px solid var(--line); border-radius:999px; padding:7px 15px; font-size:13.5px; background:#fff;}
+  .pill b{font-weight:600;} .pill span{color:var(--muted);}
+  .callout{background:var(--paper2); border-left:3px solid var(--blue); border-radius:0 10px 10px 0; padding:16px 20px; margin:26px 0; font-size:14.5px; color:#334155;}
+  .callout b{color:var(--ink);}
+  .callout.amber{border-left-color:var(--warn);}
+  section{padding-top:52px; margin-top:8px; border-top:1px solid var(--line2);}
+  section:first-of-type{border-top:none;}
+  .sec-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px;}
+  .sec-eyebrow{font-size:11px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--blue);}
+  .sec-num{font-size:13px; color:var(--faint); font-variant-numeric:tabular-nums;}
+  h2{font-size:30px; font-weight:300; letter-spacing:-0.02em; margin:6px 0 16px;}
+  h2 .b{color:var(--blue);}
+  p{margin:12px 0; font-size:14.5px; color:#334155;}
+  .note{font-size:14.5px; color:var(--muted);}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:14px;}
+  th,td{text-align:right; padding:10px 12px; border-bottom:1px solid var(--line2);}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); border-bottom:1px solid var(--line);}
+  tbody tr:hover{background:var(--paper2);}
+  td.strong{font-weight:600;}
+  .tag{display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:6px;}
+  .tag.g{background:#DCFCE7; color:#166534;}
+  .tag.w{background:#FEF3C7; color:#92400E;}
+  .tag.b{background:#FEE2E2; color:#991B1B;}
+  .mono{font-variant-numeric:tabular-nums;}
+  .metrics{display:flex; gap:16px; flex-wrap:wrap; margin:22px 0;}
+  .metric{flex:1; min-width:150px; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+  .metric .k{font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);}
+  .metric .v{font-size:30px; font-weight:300; letter-spacing:-0.02em; margin-top:6px;}
+  .metric .v .b{color:var(--blue);}
+  .metric .d{font-size:12.5px; color:var(--muted); margin-top:4px;}
+  ol.actions{counter-reset:a; list-style:none; padding:0; margin:16px 0;}
+  ol.actions li{counter-increment:a; position:relative; padding:14px 0 14px 44px; border-bottom:1px solid var(--line2); font-size:14.5px; color:#334155;}
+  ol.actions li::before{content:counter(a); position:absolute; left:0; top:12px; width:28px; height:28px; border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:600; display:grid; place-items:center;}
+  ol.actions li b{font-weight:600;}
+  ul.clean{list-style:none; padding:0; margin:14px 0;}
+  ul.clean li{padding:10px 0 10px 20px; border-bottom:1px solid var(--line2); position:relative; font-size:14.5px;}
+  ul.clean li::before{content:""; position:absolute; left:2px; top:19px; width:6px; height:6px; border-radius:50%; background:var(--blue);}
+  footer{margin-top:64px; padding-top:24px; border-top:1px solid var(--line); font-size:13px; color:var(--muted);}
+  footer .tagline{font-size:16px; color:var(--ink); font-weight:500; margin-bottom:8px;}
+  .updated{display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:12.5px; color:var(--muted); margin-bottom:26px;}
+  .updated .u-live{font-weight:600; color:#334155;}
+  .updated .u-sep{color:var(--faint);}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--good); flex:none; box-shadow:0 0 0 0 rgba(22,163,74,.5); animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.55);} 70%{box-shadow:0 0 0 8px rgba(22,163,74,0);} 100%{box-shadow:0 0 0 0 rgba(22,163,74,0);}}
+  .mtopbar,.mtabs,.msheet,.mscrim{display:none;}
+  @media(max-width:900px){
+    .sidebar{display:none;} main{margin-left:0;} .wrap{padding:74px 20px 108px; max-width:none;}
+    section{scroll-margin-top:66px;}
+    table{font-size:13px; display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap;}
+    .metrics{gap:10px;} .metric{min-width:calc(50% - 5px); padding:14px 15px;} .metric .v{font-size:24px;}
+    .pills{gap:8px;} .pill{font-size:12.5px; padding:6px 12px;}
+  }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">AI Funding <span class="b">Solutions</span></div>
+  <div class="brand-sub">Paid Media Report · Eaze Account 2</div>
+  <div class="navgroup">
+    <h4>Overview</h4>
+    <a class="navlink" href="#s00"><span class="n">00</span> Executive summary</a>
+    <a class="navlink" href="#s01"><span class="n">01</span> Account snapshot</a>
+  </div>
+  <div class="navgroup">
+    <h4>Performance</h4>
+    <a class="navlink" href="#s02"><span class="n">02</span> Campaigns</a>
+    <a class="navlink" href="#s03"><span class="n">03</span> Ads</a>
+    <a class="navlink" href="#s04"><span class="n">04</span> Creative &amp; fatigue</a>
+  </div>
+  <div class="navgroup">
+    <h4>Audience &amp; delivery</h4>
+    <a class="navlink" href="#s05"><span class="n">05</span> Placement &amp; platform</a>
+    <a class="navlink" href="#s06"><span class="n">06</span> Device</a>
+    <a class="navlink" href="#s07"><span class="n">07</span> Demographics</a>
+    <a class="navlink" href="#s08"><span class="n">08</span> Geography</a>
+    <a class="navlink" href="#s09"><span class="n">09</span> Dayparting</a>
+  </div>
+  <div class="navgroup">
+    <h4>Data &amp; actions</h4>
+    <a class="navlink" href="#s10"><span class="n">10</span> Data trust</a>
+    <a class="navlink" href="#s11"><span class="n">11</span> Opportunities</a>
+    <a class="navlink" href="#s12"><span class="n">12</span> Action list</a>
+  </div>
+</aside>
+
+<main>
+<div class="wrap">
+
+  <div class="updated"><span class="dot"></span><span class="u-live">Live data</span><span class="u-sep">·</span><span class="u-pull">Pulled Wed, Jul 8, 2026, approx. 8:12 AM PDT advertiser clock (PST8PDT)</span><span class="u-sep">·</span><span class="u-win">Week-to-date Sun Jul 5 – Wed Jul 8, 2026; the advertiser clock had just crossed into Wednesday morning at pull time, so the window covers 3 full settled days (Sun–Tue) plus a partial fourth day (~8 hours of Wed)</span></div>
+  <h1 class="display">Paid Media <span class="b">Report</span></h1>
+  <p class="lead">Eaze Account 2, the AI Funding Solutions ad account. Objective is lead generation, so the headline number is cost per result, not ROAS. Two result types run in parallel, appointments booked for med spa and website leads for dental and derma, and they are never cross compared.</p>
+
+  <div class="pills">
+    <div class="pill"><b>$763.45</b> <span>per day (3 full days)</span></div>
+    <div class="pill"><b>41</b> <span>appointments</span></div>
+    <div class="pill"><b>12</b> <span>leads</span></div>
+    <div class="pill"><b>$17.86</b> <span>per lead, blended</span></div>
+    <div class="pill"><b>$50.63</b> <span>per appointment, blended</span></div>
+  </div>
+
+  <div class="callout">
+    <b>Scope.</b> This is purely a media performance report, pulled from Meta through the Meta MCP. It contains no sales, revenue or CRM data, and makes no assumptions beyond what Meta itself reports. Every figure below is Meta media data only, for Eaze Ad Account 2.
+  </div>
+  <div class="callout">
+    <b>Read this first.</b> Every number here is live from the Meta Marketing API for the window shown, not modelled or estimated. Where Meta could not return a figure, it is marked as unavailable rather than guessed. Breakdown tables (placement, device, demographics, geography, dayparting) return spend and engagement only, not conversions, because Meta will not merge results across the campaigns' mixed attribution settings, so read those as an efficiency and budget lens. The last two or three days of any window are still settling because of Meta's attribution lag, so their result counts will rise; the appointment and lead totals here are floors, not final.
+  </div>
+  <div class="callout amber">
+    <b>What changed since the last report (Tue Jul 7, ~3:11 PM PDT).</b> Meta's account opportunity score fell from 84/100 to 82/100 — the first decline seen across tracked runs of this account (prior moves had only held steady or improved). Total spend grew from $1,674.29 to $2,290.35 as the window absorbed a full extra day plus Wednesday's partial morning; appointments rose from 33 to 41 (+8) and leads from 10 to 12 (+2). The same three campaigns remain the only ones live — no pauses, adds, or restructuring. One data-quality flag: the "Eaze Consulting" pixel's Lead event match quality dropped from 7.4 to 6.1 and now shows zero PII match keys (email/phone/name) on Lead events at all, versus partial coverage last time — see Section 10.
+  </div>
+
+  <!-- 00 -->
+  <section id="s00">
+    <div class="sec-head"><span class="sec-eyebrow">Overview</span><span class="sec-num">00</span></div>
+    <h2>Executive <span class="b">summary</span></h2>
+    <p>Across the window (3 full settled days, Sun Jul 5 – Tue Jul 7, plus roughly 8 hours of Wed Jul 8 on the advertiser's PST8PDT clock at pull time), Eaze Account 2 spent $2,290.35 to generate 41 appointments and 12 leads. The Aashish Maru UGC Reels campaign is the most efficient appointment engine at $39.88 per appointment, well ahead of the broader Med Spa + Dental ABO campaign at $59.05 per appointment. RPF 01 remains the account's only lead-generating campaign, converting at $17.86 per lead on a 4.52% CTR — still the single cheapest result type in the account. Instagram again absorbed the majority of spend (57.0%, $1,307.09) at the account's weakest CTR (2.02%) and highest CPC ($8.33) among the major platforms, while Facebook ran at less than half that CPC. The opportunity score slipped from 84 to 82, the first drop across tracked pulls, driven mainly by a newly-surfaced 7-point A+ Creative enhancements bundle Meta has not yet had applied.</p>
+    <ul class="clean">
+      <li><b>Best appointment engine:</b> Aashish Maru [Do Not Touch] | Medspa UGC Reels — $39.88 per appointment, 18 appointments, 2.00% CTR.</li>
+      <li><b>Best lead engine:</b> RPF 01 - Dentists - WV - Images — $17.86 per lead, 12 leads, 4.52% CTR (the account's only lead-generating campaign this window).</li>
+      <li><b>Biggest drain:</b> Instagram as a platform — $1,307.09 (57.0% of spend) at $8.33 CPC and 2.02% CTR, the account's least efficient major channel.</li>
+      <li><b>Notable change:</b> Opportunity score fell from 84 to 82 since the last report; the "Eaze Consulting" pixel's Lead match quality also regressed from 7.4 to 6.1 with zero PII keys now captured — both flagged for review in Sections 10–11.</li>
+    </ul>
+  </section>
+
+  <!-- 01 -->
+  <section id="s01">
+    <div class="sec-head"><span class="sec-eyebrow">Overview</span><span class="sec-num">01</span></div>
+    <h2>Account <span class="b">snapshot</span></h2>
+    <div class="metrics">
+      <div class="metric"><div class="k">Total spend</div><div class="v">$2,290.35</div><div class="d">3 full days + partial Wed · $763.45/day</div></div>
+      <div class="metric"><div class="k">Impressions</div><div class="v">15,523</div><div class="d">446 clicks · 2.87% CTR</div></div>
+      <div class="metric"><div class="k">Appointments</div><div class="v"><span class="b">41</span></div><div class="d">$50.63 blended each</div></div>
+      <div class="metric"><div class="k">Leads</div><div class="v"><span class="b">12</span></div><div class="d">$17.86 each</div></div>
+    </div>
+    <p class="note">Objective: OUTCOME_LEADS across all campaigns. Currency USD. Reach 8,925 at 1.74 frequency. CPC $5.14, CPM $147.55. Business Manager: Eaze Consulting. Account ID act_797173066166825, advertiser time zone PST8PDT.</p>
+  </section>
+
+  <!-- 02 -->
+  <section id="s02">
+    <div class="sec-head"><span class="sec-eyebrow">Performance</span><span class="sec-num">02</span></div>
+    <h2>Campaign <span class="b">performance</span></h2>
+    <p>All three live campaigns spent this window — no legacy or paused campaigns picked up any budget, so campaign spend ties to the account total exactly. RPF 01 leads the account on efficiency by a wide margin; between the two appointment campaigns, the UGC Reels campaign converts at roughly two-thirds the cost per appointment of the broader ABO campaign.</p>
+    <table>
+      <thead><tr><th>Campaign</th><th>Result</th><th>Cost / result</th><th>Spend</th><th>CTR</th><th>CPC</th><th>Freq</th></tr></thead>
+      <tbody>
+        <tr><td>Aashish Maru [Do Not Touch] | Medspa UGC Reels | CBO | Demographic</td><td>18 appointments</td><td class="strong">$39.88</td><td>$717.90</td><td>2.00%</td><td>$6.59</td><td>1.42</td></tr>
+        <tr><td>AI Funding Solutions | Med Spa + Dental | ABO | Broad</td><td>23 appointments</td><td class="strong">$59.05</td><td>$1,358.09</td><td>2.78%</td><td>$7.19</td><td>1.89</td></tr>
+        <tr><td>RPF 01 - Dentists - WV - Images</td><td>12 leads</td><td class="strong">$17.86</td><td>$214.36</td><td>4.52%</td><td>$1.45</td><td>1.39</td></tr>
+      </tbody>
+    </table>
+    <p class="note">No spend landed on any of the other 8 campaigns in the account this window (including the legacy "(Pixel Updated)" and "Warm Up" campaigns) — all are paused or dormant, so there is no residual spend to reconcile.</p>
+  </section>
+
+  <!-- 03 -->
+  <section id="s03">
+    <div class="sec-head"><span class="sec-eyebrow">Performance</span><span class="sec-num">03</span></div>
+    <h2>Ad <span class="b">performance</span></h2>
+    <p class="note">Ads with $20 or more spend this window, ranked by spend. 9 smaller ads (~$46.24 combined) are omitted below.</p>
+    <table>
+      <thead><tr><th>Ad</th><th>Spend</th><th>Results</th><th>Cost / result</th><th>CTR</th></tr></thead>
+      <tbody>
+        <tr><td>UGC Reel Ad 05</td><td>$667.65</td><td>18 appointments</td><td class="strong">$37.09</td><td>2.03%</td></tr>
+        <tr><td>V1 | AI Image 2 | Dentist</td><td>$657.32</td><td>11 appointments</td><td class="strong">$59.76</td><td>2.45%</td></tr>
+        <tr><td>V1 | Image 4 | Med Spa</td><td>$365.23</td><td>3 appointments</td><td class="strong">$121.74</td><td>1.93%</td></tr>
+        <tr><td>New Leads ad</td><td>$214.36</td><td>12 leads</td><td class="strong">$17.86</td><td>4.52%</td></tr>
+        <tr><td>V1 | News Image 1 | Dentist</td><td>$186.57</td><td>2 appointments</td><td class="strong">$93.29</td><td>4.27%</td></tr>
+        <tr><td>V1 | AI Image 5 | Med Spa</td><td>$103.91</td><td>2 appointments</td><td class="strong">$51.96</td><td>3.95%</td></tr>
+        <tr><td>UGC Reel Ad 03</td><td>$49.07</td><td>0 appointments</td><td class="strong">$0.00</td><td>1.31%</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Omitted (each under $20): "V1 | Image 1 | Med Spa" $18.60 (2 appointments, $9.30 each), "V1 | AI Image 1 | Dentist" $18.56 (3 appointments, $6.19 each), "V1 | News Image 2 | Dentist" $3.79 (0), "V1 | AI Image 3 | Dentist" $1.84 (0), "V1 | News Image 3 | Dentist" $1.34 (0), "UGC Reel Ad 04" $0.63 (0), "V1 | AI Image 2 | Med Spa" $0.56 (0), "UGC Reel Ad 01" $0.55 (0), "V1 | Carousel | Image 1 | Med Spa" $0.37 (0) — combined $46.24, 5 appointments total (all from the two $18-range ads above).</p>
+  </section>
+
+  <!-- 04 -->
+  <section id="s04">
+    <div class="sec-head"><span class="sec-eyebrow">Performance</span><span class="sec-num">04</span></div>
+    <h2>Creative &amp; <span class="b">fatigue</span></h2>
+    <p>Three full days of daily data now exist for each of these ads, plus a partial fourth (Jul 8 had only been running ~8 hours on the advertiser clock at pull time, so that reading is directional only). "V1 | Image 4 | Med Spa" shows the clearest fatigue signal — CTR fell on every single full day and continued lower into the partial day. "UGC Reel Ad 05" dipped once and then held flat across two full days, which reads as a plateau rather than ongoing decay. "V1 | AI Image 2 | Dentist" is recovering upward over its last two readings, though the partial-day figure carries more variance from its smaller sample.</p>
+    <table>
+      <thead><tr><th>Ad</th><th>Verified daily CTR</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr><td>V1 | Image 4 | Med Spa</td><td>Jul 5: 2.69% → Jul 6: 1.68% → Jul 7: 1.49% → Jul 8 (partial): 0.84%</td><td><span class="tag w">Declining</span> — CTR fell every full day on record; the clearest fatigue signal of the three</td></tr>
+        <tr><td>UGC Reel Ad 05</td><td>Jul 5: 2.51% → Jul 6: 1.83% → Jul 7: 1.83% → Jul 8 (partial): 1.57%</td><td><span class="tag g">Plateaued</span> — dropped once, then held flat across two full days; partial-day dip too early to call fresh decline</td></tr>
+        <tr><td>V1 | AI Image 2 | Dentist</td><td>Jul 5: 2.93% → Jul 6: 1.89% → Jul 7: 2.51% → Jul 8 (partial): 3.65%</td><td><span class="tag g">Ramping</span> — recovering upward over the last two readings; partial-day figure is a small, early-hours sample</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 05 -->
+  <section id="s05">
+    <div class="sec-head"><span class="sec-eyebrow">Audience &amp; delivery</span><span class="sec-num">05</span></div>
+    <h2>Placement &amp; <span class="b">platform</span></h2>
+    <p>Instagram takes the majority of spend (57.0%) but is the least efficient of the two major platforms — its CPC is more than double Facebook's and its CTR is the lowest of the group. Facebook is the stronger performer on both cost and engagement.</p>
+    <table>
+      <thead><tr><th>Platform</th><th>Spend</th><th>Impr</th><th>CTR</th><th>CPC</th><th>CPM</th></tr></thead>
+      <tbody>
+        <tr><td>Instagram</td><td>$1,307.09</td><td>7,790</td><td>2.02%</td><td>$8.33</td><td>$167.79</td></tr>
+        <tr><td>Facebook</td><td>$932.59</td><td>7,142</td><td>3.54%</td><td>$3.69</td><td>$130.58</td></tr>
+        <tr><td>Threads</td><td>$26.27</td><td>246</td><td>3.25%</td><td>$3.28</td><td>$106.80</td></tr>
+        <tr><td>Audience Network</td><td>$20.72</td><td>317</td><td>8.20%</td><td>$0.80</td><td>$65.38</td></tr>
+        <tr><td>Unknown</td><td>$6.37</td><td>39</td><td>7.69%</td><td>$2.12</td><td>$163.35</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Top 10 positions by spend; 8 smaller placements (search, right-hand column, Reels overlay, Explore grid, rewarded video, notification, Instagram search, and one other) combine for $12.04 and are omitted.</p>
+    <table>
+      <thead><tr><th>Position</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>Feed (FB + IG combined)</td><td>$1,504.49</td><td>2.70%</td><td>$5.83</td></tr>
+        <tr><td>Instagram Reels</td><td>$258.64</td><td>2.37%</td><td>$5.75</td></tr>
+        <tr><td>Facebook Reels</td><td>$219.71</td><td>2.89%</td><td>$5.36</td></tr>
+        <tr><td>Instagram Stories</td><td>$141.75</td><td>3.96%</td><td>$5.06</td></tr>
+        <tr><td>Marketplace</td><td>$49.13</td><td>2.76%</td><td>$1.89</td></tr>
+        <tr><td>Facebook Stories</td><td>$33.68</td><td>4.41%</td><td>$5.61</td></tr>
+        <tr><td>Threads Feed</td><td>$26.27</td><td>3.25%</td><td>$3.28</td></tr>
+        <tr><td>Audience Network Classic</td><td>$20.65</td><td>8.25%</td><td>$0.79</td></tr>
+        <tr><td>Facebook Profile Feed</td><td>$15.01</td><td>2.02%</td><td>$7.50</td></tr>
+        <tr><td>In-stream Video</td><td>$11.67</td><td>4.44%</td><td>$5.83</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 06 -->
+  <section id="s06">
+    <div class="sec-head"><span class="sec-eyebrow">Audience &amp; delivery</span><span class="sec-num">06</span></div>
+    <h2>Device</h2>
+    <p>iPhone carries 78.3% of spend and delivers a middling 2.55% CTR at $6.04 CPC — well behind Android smartphone, which runs nearly half the CPC at a meaningfully higher CTR. The remaining devices (desktop, iPad, Android tablet, "other") are too low-volume for their efficiency numbers to be reliable signals yet.</p>
+    <table>
+      <thead><tr><th>Device</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>iPhone</td><td>$1,794.43</td><td>2.55%</td><td>$6.04</td></tr>
+        <tr><td>Android smartphone</td><td>$404.69</td><td>3.90%</td><td>$3.11</td></tr>
+        <tr><td>Desktop</td><td>$47.75</td><td>1.59%</td><td>$11.94</td></tr>
+        <tr><td>iPad</td><td>$36.00</td><td>5.00%</td><td>$4.00</td></tr>
+        <tr><td>Other</td><td>$6.47</td><td>6.98%</td><td>$2.16</td></tr>
+        <tr><td>Android tablet</td><td>$3.72</td><td>6.35%</td><td>$0.93</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 07 -->
+  <section id="s07">
+    <div class="sec-head"><span class="sec-eyebrow">Audience &amp; delivery</span><span class="sec-num">07</span></div>
+    <h2>Demographics</h2>
+    <p>No single age band is worst on both dimensions: 25-34 has the account's lowest CTR (1.48%) but not the highest CPC, while 35-44 has the highest CPC ($6.94) but not the lowest CTR. 55-64 and 65+ split the top of the CTR range, with 55-64 pairing its strong CTR (4.75%) with the lower of the two CPCs ($3.96 vs. $4.13).</p>
+    <table>
+      <thead><tr><th>Age</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>45-54</td><td>$665.55</td><td>3.13%</td><td>$5.00</td></tr>
+        <tr><td>35-44</td><td>$645.08</td><td>1.86%</td><td>$6.94</td></tr>
+        <tr><td>55-64</td><td>$554.58</td><td>4.75%</td><td>$3.96</td></tr>
+        <tr><td>25-34</td><td>$236.61</td><td>1.48%</td><td>$6.76</td></tr>
+        <tr><td>65+</td><td>$190.06</td><td>4.77%</td><td>$4.13</td></tr>
+        <tr><td>Unknown</td><td>$1.17</td><td>0.00%</td><td>Not available</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Gender</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>Male</td><td>$1,304.06</td><td>2.89%</td><td>$4.85</td></tr>
+        <tr><td>Female</td><td>$966.21</td><td>2.88%</td><td>$5.65</td></tr>
+        <tr><td>Unknown</td><td>$22.78</td><td>2.31%</td><td>$3.25</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 08 -->
+  <section id="s08">
+    <div class="sec-head"><span class="sec-eyebrow">Audience &amp; delivery</span><span class="sec-num">08</span></div>
+    <h2>Geography</h2>
+    <p class="note">Top 10 states by spend. No single state is worst on both dimensions this window: New York has the lowest CTR (2.37%) in the top 10 but not the highest CPC, while Arizona has the highest CPC ($7.84) but not the lowest CTR.</p>
+    <table>
+      <thead><tr><th>State</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>California</td><td>$426.42</td><td>2.48%</td><td>$6.46</td></tr>
+        <tr><td>Florida</td><td>$382.24</td><td>2.61%</td><td>$6.27</td></tr>
+        <tr><td>New York</td><td>$176.47</td><td>2.37%</td><td>$6.79</td></tr>
+        <tr><td>Texas</td><td>$154.66</td><td>2.81%</td><td>$4.07</td></tr>
+        <tr><td>Arizona</td><td>$101.90</td><td>2.42%</td><td>$7.84</td></tr>
+        <tr><td>Georgia</td><td>$87.76</td><td>3.99%</td><td>$3.51</td></tr>
+        <tr><td>Illinois</td><td>$83.87</td><td>3.53%</td><td>$4.19</td></tr>
+        <tr><td>Virginia</td><td>$62.87</td><td>3.38%</td><td>$5.72</td></tr>
+        <tr><td>North Carolina</td><td>$58.76</td><td>4.38%</td><td>$3.67</td></tr>
+        <tr><td>Louisiana</td><td>$53.18</td><td>3.12%</td><td>$5.32</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 09 -->
+  <section id="s09">
+    <div class="sec-head"><span class="sec-eyebrow">Audience &amp; delivery</span><span class="sec-num">09</span></div>
+    <h2>Dayparting</h2>
+    <p class="note">Full 24 hours, advertiser time zone (PST8PDT). Noon (12:00-12:59) is the best-value hour on both dimensions — the account's highest CTR (5.12%) and lowest CPC ($2.71) at meaningful spend. 2 PM (14:00-14:59) is the worst-value hour on both dimensions — the lowest CTR (1.57%) and highest CPC ($9.73) of any hour.</p>
+    <table>
+      <thead><tr><th>Hour</th><th>Spend</th><th>CTR</th><th>CPC</th></tr></thead>
+      <tbody>
+        <tr><td>00:00</td><td>$69.54</td><td>3.28%</td><td>$4.09</td></tr>
+        <tr><td>01:00</td><td>$51.62</td><td>5.02%</td><td>$3.69</td></tr>
+        <tr><td>02:00</td><td>$61.13</td><td>3.29%</td><td>$5.09</td></tr>
+        <tr><td>03:00</td><td>$66.23</td><td>2.07%</td><td>$7.36</td></tr>
+        <tr><td>04:00</td><td>$106.23</td><td>3.29%</td><td>$5.06</td></tr>
+        <tr><td>05:00</td><td>$94.17</td><td>2.65%</td><td>$5.54</td></tr>
+        <tr><td>06:00</td><td>$120.09</td><td>1.93%</td><td>$8.58</td></tr>
+        <tr><td>07:00</td><td>$109.86</td><td>2.74%</td><td>$4.99</td></tr>
+        <tr><td>08:00</td><td>$102.41</td><td>2.27%</td><td>$6.83</td></tr>
+        <tr><td>09:00</td><td>$101.79</td><td>1.97%</td><td>$6.79</td></tr>
+        <tr><td>10:00</td><td>$99.12</td><td>3.41%</td><td>$4.51</td></tr>
+        <tr><td>11:00</td><td>$93.56</td><td>3.51%</td><td>$4.07</td></tr>
+        <tr><td>12:00</td><td>$97.55</td><td class="strong">5.12%</td><td class="strong">$2.71</td></tr>
+        <tr><td>13:00</td><td>$87.66</td><td>3.54%</td><td>$3.98</td></tr>
+        <tr><td>14:00</td><td>$107.08</td><td class="strong">1.57%</td><td class="strong">$9.73</td></tr>
+        <tr><td>15:00</td><td>$128.98</td><td>2.64%</td><td>$6.45</td></tr>
+        <tr><td>16:00</td><td>$121.03</td><td>1.58%</td><td>$8.07</td></tr>
+        <tr><td>17:00</td><td>$125.90</td><td>3.41%</td><td>$4.34</td></tr>
+        <tr><td>18:00</td><td>$142.16</td><td>2.33%</td><td>$6.46</td></tr>
+        <tr><td>19:00</td><td>$128.57</td><td>3.35%</td><td>$4.59</td></tr>
+        <tr><td>20:00</td><td>$111.73</td><td>3.74%</td><td>$3.85</td></tr>
+        <tr><td>21:00</td><td>$72.87</td><td>3.09%</td><td>$4.55</td></tr>
+        <tr><td>22:00</td><td>$54.25</td><td>2.28%</td><td>$6.03</td></tr>
+        <tr><td>23:00</td><td>$39.52</td><td>2.56%</td><td>$4.39</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 10 -->
+  <section id="s10">
+    <div class="sec-head"><span class="sec-eyebrow">Data &amp; actions</span><span class="sec-num">10</span></div>
+    <h2>Data <span class="b">trust</span></h2>
+    <p>If the pixels are not matching, every cost per result above is unreliable. Two active, this-business-manager pixels returned usable Event Match Quality (EMQ) scores this run. The "Eaze Consulting" pixel's Lead match quality has regressed since the last report — dropping from 7.4 to 6.1 and now showing zero PII match keys (email, phone, name) captured on Lead events at all, versus partial (38.5%) coverage last time. The MCP tools did not surface which specific campaign or ad set is wired to which pixel — flagging both the regression and that mapping gap for JV to confirm manually in Events Manager rather than guessing.</p>
+    <table>
+      <thead><tr><th>Pixel</th><th>Lead match</th><th>Schedule match</th><th>SubmitApp</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>Eaze Consulting Pixel1 (2708214466194348)</td><td>9.2</td><td>9.3</td><td>6.1</td><td><span class="tag g">Trustworthy</span> Lead/Schedule; SubmitApplication lacks any PII match key, treat as directional</td></tr>
+        <tr><td>Eaze Consulting (1535381111508445)</td><td>6.1</td><td>9.3</td><td>6.1</td><td><span class="tag b">Regressed</span> Schedule still reliable; Lead match fell from 7.4 to 6.1 with no PII keys captured this run — cost-per-lead on this pixel now carries materially more uncertainty than last report</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 11 -->
+  <section id="s11">
+    <div class="sec-head"><span class="sec-eyebrow">Data &amp; actions</span><span class="sec-num">11</span></div>
+    <h2>Opportunities</h2>
+    <p>Meta account opportunity score: <b>82 / 100</b>, down 2 points from the 84/100 recorded in the prior report (2026-07-07, ~3:11 PM PDT) — the first decline seen across tracked runs of this account.</p>
+    <table>
+      <thead><tr><th>Fix</th><th>Estimated impact</th><th>Points</th></tr></thead>
+      <tbody>
+        <tr><td>A+ Creative standard enhancements (7 ads: AI Image 2 Dentist, Image 4 Med Spa, New Leads ad, News Image 3 Dentist, Carousel Image 1 Med Spa, UGC Reel Ad 01, AI Image 3 Dentist)</td><td>3% lower cost per result</td><td class="strong">7</td></tr>
+        <tr><td>Auto-add music to 3 ads (Carousel/Image 1 Med Spa, Image 1 Med Spa, New Leads ad)</td><td>Higher clickthrough rate</td><td class="strong">2</td></tr>
+        <tr><td>Add fullscreen 9:16 Reels video w/ audio (4 entities flagged)</td><td>8% lower cost per result each</td><td class="strong">1 each</td></tr>
+        <tr><td>Generate AI creative variety (AI Image 3 Dentist, Image 4 Med Spa, AI Image 2 Dentist)</td><td>10% higher CTR each</td><td class="strong">1 each</td></tr>
+        <tr><td>Mix image + video formats in one ad set</td><td>More conversions per dollar</td><td class="strong">1</td></tr>
+        <tr><td>Scale the RPF 01 - Dentists campaign (stable delivery, low cost/result vs. peers)</td><td>74% more conversions</td><td class="strong">1</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 12 -->
+  <section id="s12">
+    <div class="sec-head"><span class="sec-eyebrow">Data &amp; actions</span><span class="sec-num">12</span></div>
+    <h2>Action list</h2>
+    <ol class="actions">
+      <li><b>Apply the A+ Creative enhancements bundle.</b> Now the single highest-value item in Meta's opportunity score (+7 points, 3% lower cost/result) across 7 already-running ads — the cheapest lift available this run, and the main driver behind the score's 2-point drop while it sits unapplied.</li>
+      <li><b>Scale RPF 01 - Dentists - WV - Images.</b> $17.86 per lead on a 4.52% CTR is the account's most efficient engine by a wide margin, and Meta's own opportunity score flags it as stable enough to scale (+74% conversions estimated).</li>
+      <li><b>Investigate the "Eaze Consulting" pixel's Lead match regression.</b> Lead event match quality fell from 7.4 to 6.1 since the last report, with zero PII match keys (email/phone/name) now captured versus partial coverage before — check whether a form-field change or tracking break hit whichever landing page feeds this pixel.</li>
+      <li><b>Prep a refresh for "V1 | Image 4 | Med Spa."</b> CTR fell on every full day this window (2.69% → 1.68% → 1.49%, continuing to 0.84% in the partial fourth day) — the clearest fatigue signal in the account, on an ad still spending $365.23.</li>
+      <li><b>Address the Instagram CPC gap.</b> Instagram takes 57.0% of spend ($1,307.09) at $8.33 CPC vs. Facebook's $3.69 — more than double. Test shifting budget weight toward Facebook placements or letting Advantage+ placements rebalance automatically.</li>
+      <li><b>Reduce or exclude the 2 PM hour.</b> 14:00-14:59 is the worst dayparting slot on both CTR (1.57%) and CPC ($9.73) — a clear candidate for a bid reduction or scheduling exclusion.</li>
+      <li><b>Lean into the noon hour.</b> 12:00-12:59 is the best-value hour on both CTR (5.12%) and CPC ($2.71) at meaningful spend ($97.55) — worth testing a bid boost or added budget in that window.</li>
+      <li><b>Watch "V1 | AI Image 2 | Dentist" for a confirmed recovery.</b> CTR has climbed for two straight readings (1.89% → 2.51% → 3.65%), but the latest point is a partial, early-hours day — confirm the trend holds once Jul 8 fully settles before reallocating budget toward it.</li>
+    </ol>
+    <p>Overall direction: the three live campaigns are healthy and growing steadily on volume — spend, appointments, and leads are all up since the last report — but the opportunity score's first-ever dip and a real pixel match-quality regression mean this is a run to act on the Data trust and Opportunities sections, not just the media performance numbers.</p>
+  </section>
+
+  <footer>
+    <div class="tagline">AI Funding Solutions</div>
+    <p>Reporting window Sun Jul 5 – Wed Jul 8, 2026 (week-to-date); the advertiser clock (PST8PDT) had just crossed into Wed Jul 8, 2026 (~8:12 AM) at pull time, so every figure above covers 3 full settled days (Sun–Tue) plus a partial fourth day (Wed, ~8 hours in). All figures pulled live from the Meta Marketing API for Eaze Account 2 (act_797173066166825) on Wed, Jul 8, 2026, approx. 8:12 AM PDT. Every table reconciles to the account total of $2,290.35 to the cent — account, campaign, and ad-level tables all tie exactly; the platform, position, device, age, gender, and region breakdown tables (pulled slightly later in the sequence) settled at $2,293.04–$2,293.06, and the daily time-series pull (last in the sequence) settled at $2,297.28, reflecting real spend that continued accruing live during the pull. Breakdown tables show spend and engagement only, not conversions, due to mixed attribution settings across campaigns. Creative fatigue calls are verified against real day-by-day CTR, not Meta's trend labels; the Jul 8 reading in each case reflects a partial day only. The last two to three days of the window are still settling under Meta's attribution lag, so appointment and lead counts are floors, not final. Read only: nothing in the ad account was created, paused, edited or changed by this report.</p>
+  </footer>
+
+</div>
+</main>
+</body>
+</html>

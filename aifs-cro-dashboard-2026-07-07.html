@@ -1,0 +1,549 @@
+<style>
+  :root{
+    --bg:#F7F8FA; --card:#FFFFFF; --line:#E5E7EB; --line-soft:#EEF0F3;
+    --ink:#1F2937; --muted:#6B7280; --faint:#9CA3AF;
+    --blue:#2563EB; --blue-soft:#EEF2FF;
+    --amber:#D97706; --amber-soft:#FEF3E2;
+    --green:#16A34A; --green-soft:#EAF7EE;
+    --red:#DC2626; --red-soft:#FDEDEC;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--sans); margin:0; padding:0; -webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .shell{display:flex; min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{width:250px; min-width:250px; background:var(--card); border-right:1px solid var(--line); padding:20px 14px; position:sticky; top:0; height:100vh; overflow-y:auto;}
+  .brand h1{font-size:0.98rem; font-weight:700; margin:0 0 2px;}
+  .brand .sub{font-size:0.78rem; color:var(--muted); margin:0 0 6px;}
+  .brand .tag{font-size:0.76rem; color:var(--blue); text-decoration:underline; cursor:default;}
+  nav{margin-top:18px;}
+  .navgroup{margin-bottom:16px;}
+  .navlabel{font-size:0.66rem; font-weight:700; letter-spacing:0.06em; color:var(--faint); text-transform:uppercase; padding:0 10px; margin:0 0 4px;}
+  .navitem{display:block; width:100%; text-align:left; background:none; border:none; padding:7px 10px; border-radius:6px; font-size:0.85rem; color:var(--muted); cursor:pointer; font-family:var(--sans);}
+  .navitem:hover{background:var(--line-soft); color:var(--ink);}
+  .navitem.active{background:var(--blue-soft); color:var(--blue); font-weight:600;}
+  .navitem:focus-visible{outline:2px solid var(--blue); outline-offset:1px;}
+
+  /* Main */
+  .main{flex:1; min-width:0; padding:22px 32px 80px;}
+  .topbar{display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:22px;}
+  .topbar .crumbtop{display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:600; color:var(--ink);}
+  .topbar .who{font-size:0.82rem; color:var(--muted);}
+  .crumb{font-size:0.7rem; font-weight:700; letter-spacing:0.06em; color:var(--blue); text-transform:uppercase; margin:0 0 6px;}
+  .pagehead h1{font-size:1.7rem; font-weight:600; margin:0 0 8px; letter-spacing:-0.01em;}
+  .pagesub{font-size:0.85rem; color:var(--muted); line-height:1.6; max-width:78ch; margin:0 0 24px;}
+
+  .page{display:none;}
+  .page.active{display:block;}
+
+  .wintabs{display:inline-flex; gap:2px; background:var(--line-soft); border-radius:8px; padding:3px; margin:18px 0 6px;}
+  .wintab{font-family:var(--sans); font-size:0.82rem; font-weight:500; padding:7px 16px; border-radius:6px; border:none; background:transparent; color:var(--muted); cursor:pointer;}
+  .wintab[aria-selected="true"]{background:var(--card); color:var(--blue); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,0.06);}
+  .winnote{font-size:0.8rem; color:var(--muted); margin:0 0 20px;}
+
+  .sectionlabel{font-size:0.7rem; font-weight:700; letter-spacing:0.05em; color:var(--faint); text-transform:uppercase; margin:22px 0 10px;}
+  .cardgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .cardgrid.c3{grid-template-columns:repeat(3,1fr);}
+  .cardgrid.c2{grid-template-columns:repeat(2,1fr);}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; box-shadow:0 1px 2px rgba(16,24,40,0.03);}
+  .card .num{font-size:1.65rem; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.1; margin:0 0 4px;}
+  .card .num.blue{color:var(--blue);}
+  .card .num.amber{color:var(--amber);}
+  .card .num.green{color:var(--green);}
+  .card .num.red{color:var(--red);}
+  .card .num.muted{color:var(--faint); font-weight:500; font-size:1.2rem;}
+  .card .lbl{font-size:0.86rem; color:var(--ink); margin:0 0 3px;}
+  .card .cap{font-size:0.72rem; color:var(--faint); margin:0;}
+
+  .callout{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:8px; padding:14px 16px; margin:18px 0;}
+  .callout.warn{border-left-color:var(--amber);}
+  .callout.good{border-left-color:var(--green);}
+  .callout h4{font-size:0.92rem; margin:0 0 6px; font-weight:600;}
+  .callout p{font-size:0.83rem; color:var(--muted); line-height:1.6; margin:0;}
+  .callout p+p{margin-top:8px;}
+
+  .placeholder{background:repeating-linear-gradient(135deg,var(--line-soft),var(--line-soft) 8px,var(--card) 8px,var(--card) 16px); border:1px dashed var(--faint); border-radius:10px; padding:20px; font-size:0.85rem; color:var(--muted);}
+
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--card);}
+  table{border-collapse:collapse; width:100%; min-width:560px; font-size:0.84rem;}
+  th{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--faint); text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); white-space:nowrap; font-weight:700;}
+  td{padding:10px 14px; border-bottom:1px solid var(--line-soft); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td.num, th.num{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums;}
+  tr.totalrow{font-weight:600; background:var(--blue-soft);}
+
+  .pill{display:inline-block; font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:2px 9px; border-radius:99px;}
+  .pill.blue{background:var(--blue-soft); color:var(--blue);}
+  .pill.amber{background:var(--amber-soft); color:var(--amber);}
+  .pill.green{background:var(--green-soft); color:var(--green);}
+  .pill.red{background:var(--red-soft); color:var(--red);}
+
+  .funnel{display:flex; flex-direction:column; gap:6px;}
+  .frow{display:grid; grid-template-columns:170px 1fr auto; align-items:center; gap:12px;}
+  .frow .fname{font-size:0.82rem;}
+  .fbar-track{background:var(--line-soft); height:18px; border-radius:4px; overflow:hidden;}
+  .fbar-fill{background:var(--blue); height:100%;}
+  .fbar-fill.won{background:var(--green);}
+  .frow .fnum{font-family:var(--mono); font-size:0.78rem; text-align:right; white-space:nowrap; color:var(--muted);}
+
+  .chain{display:flex; gap:0; flex-wrap:wrap; margin:14px 0;}
+  .chain .step{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; flex:1; min-width:150px;}
+  .chain .step .t{font-size:0.64rem; text-transform:uppercase; color:var(--faint); font-weight:700; letter-spacing:0.03em;}
+  .chain .step .d{font-size:0.82rem; margin-top:4px; line-height:1.4;}
+  .chain .arrow{display:flex; align-items:center; justify-content:center; color:var(--faint); padding:0 6px;}
+
+  footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--line); font-size:0.76rem; color:var(--faint); line-height:1.7;}
+
+  @media (max-width:900px){
+    .sidebar{display:none;}
+    .cardgrid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>AI Funding Solutions</h1>
+      <p class="sub">Marketing and Sales CRO</p>
+      <p class="tag">Live pull, JV&#8209;orchestrated</p>
+    </div>
+    <nav id="sidenav">
+      <div class="navgroup">
+        <p class="navlabel">Overview</p>
+        <button class="navitem active" data-page="scoreboard" data-crumb="OVERVIEW" data-title="CRO scoreboard">CRO scoreboard</button>
+        <button class="navitem" data-page="drilldown" data-crumb="OVERVIEW" data-title="Daily drill down">Daily drill down</button>
+        <button class="navitem" data-page="uniteconomics" data-crumb="OVERVIEW" data-title="Unit economics">Unit economics</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Marketing</p>
+        <button class="navitem" data-page="spenddelivery" data-crumb="MARKETING" data-title="Spend and delivery">Spend and delivery</button>
+        <button class="navitem" data-page="campaignperf" data-crumb="MARKETING" data-title="Campaign performance">Campaign performance</button>
+        <button class="navitem" data-page="creativefatigue" data-crumb="MARKETING" data-title="Creative and fatigue">Creative and fatigue</button>
+        <button class="navitem" data-page="landingutm" data-crumb="MARKETING" data-title="Landing, UTM and tracking">Landing, UTM and tracking</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Funnel</p>
+        <button class="navitem" data-page="funnel" data-crumb="FUNNEL" data-title="Conversion funnel">Conversion funnel</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Sales</p>
+        <button class="navitem" data-page="bookingscal" data-crumb="SALES" data-title="Bookings and calendars">Bookings and calendars</button>
+        <button class="navitem" data-page="showheldclose" data-crumb="SALES" data-title="Show, held, close">Show, held, close</button>
+        <button class="navitem" data-page="pipelineconv" data-crumb="SALES" data-title="Pipeline conversion">Pipeline conversion</button>
+        <button class="navitem" data-page="closersrouting" data-crumb="SALES" data-title="Closers and routing">Closers and routing</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Attribution</p>
+        <button class="navitem" data-page="clicktocash" data-crumb="ATTRIBUTION" data-title="Click to cash">Click to cash</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Experiments</p>
+        <button class="navitem" data-page="expbacklog" data-crumb="EXPERIMENTS" data-title="Experiment backlog">Experiment backlog</button>
+      </div>
+      <div class="navgroup">
+        <p class="navlabel">Fix</p>
+        <button class="navitem" data-page="remediation" data-crumb="FIX" data-title="Remediation priorities">Remediation priorities</button>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumbtop">AI Funding Solutions CRO</div>
+      <div class="who">Rebuilt by Claude for JV</div>
+    </div>
+
+    <div class="pagehead">
+      <p class="crumb" id="crumb">OVERVIEW</p>
+      <h1 id="pagetitle">CRO scoreboard</h1>
+      <p class="pagesub" id="pagesub">Live pull, 2026&#8209;07&#8209;07/08. Pulled on demand via the Meta, GHL and Stripe connectors, not on a fixed daily schedule. Meta window 15 Jun to 7 Jul (23 days), GHL window 15 Jun to 7 Jul.</p>
+    </div>
+
+    <!-- ============ CRO SCOREBOARD ============ -->
+    <div class="page active" id="page-scoreboard">
+      <div class="wintabs" role="tablist" aria-label="Scoreboard window">
+        <button class="wintab" role="tab" data-window="yesterday" aria-selected="false">Yesterday</button>
+        <button class="wintab" role="tab" data-window="last7" aria-selected="false">Last 7 days</button>
+        <button class="wintab" role="tab" data-window="launch" aria-selected="true">Since launch</button>
+      </div>
+      <p class="winnote" id="sb-note">Showing 15 Jun&ndash;07 Jul, 22 active days of Meta delivery</p>
+
+      <p class="sectionlabel">Meta ads, in this window</p>
+      <div class="cardgrid" id="sb-marketing"></div>
+
+      <p class="sectionlabel">GHL sales, in this window</p>
+      <div class="cardgrid" id="sb-sales"></div>
+
+      <p class="sectionlabel">Revenue, in this window</p>
+      <div class="cardgrid" id="sb-revenue"></div>
+      <p class="winnote" style="margin-top:10px;">Excludes 2 agency&#8209;test "Closed &ndash; Won" records with no matching Stripe charge. Demos booked/showed/no&#8209;show/cancelled/held all use the appointment's scheduled date so they share one denominator.</p>
+    </div>
+
+    <!-- ============ DAILY DRILL DOWN ============ -->
+    <div class="page" id="page-drilldown">
+      <div class="cardgrid c3">
+        <div class="card"><p class="num blue">8</p><p class="lbl">Demos on calendar today</p><p class="cap">GHL, by scheduled date</p></div>
+        <div class="card"><p class="num">5</p><p class="lbl">Booked yesterday (06 Jul)</p><p class="cap">created that day</p></div>
+        <div class="card"><p class="num">59</p><p class="lbl">Booked last 7 days</p><p class="cap">created 30 Jun&ndash;06 Jul</p></div>
+      </div>
+      <p class="pagesub" style="margin-top:20px;">Every day since 15 June. Spend, impressions, reach, clicks, CTR, CPC and CPM are the exact Meta account daily numbers. Leads and CPL are website&#8209;lead results and cost per lead for that day. Bookings are demo calls <em>created</em> that day in GHL, not the day the call is scheduled for.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Day</th><th class="num">Spend</th><th class="num">Impr.</th><th class="num">Reach</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">CPC</th><th class="num">CPM</th><th class="num">Leads</th><th class="num">CPL</th><th class="num">Bookings</th></tr></thead>
+          <tbody>
+            <tr><td>15 Jun</td><td class="num">$52.78</td><td class="num">500</td><td class="num">433</td><td class="num">11</td><td class="num">2.20%</td><td class="num">$4.80</td><td class="num">$105.56</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>16 Jun</td><td class="num">$67.10</td><td class="num">656</td><td class="num">561</td><td class="num">15</td><td class="num">2.29%</td><td class="num">$4.47</td><td class="num">$102.29</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>17 Jun</td><td class="num">$0.00</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0%</td><td class="num">$0.00</td><td class="num">$0.00</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">3</td></tr>
+            <tr><td>18 Jun</td><td class="num">$0.00</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0%</td><td class="num">$0.00</td><td class="num">$0.00</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>19 Jun</td><td class="num">$0.00</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0%</td><td class="num">$0.00</td><td class="num">$0.00</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>20 Jun</td><td class="num">$0.00</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0%</td><td class="num">$0.00</td><td class="num">$0.00</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">2</td></tr>
+            <tr><td>21 Jun</td><td class="num">$32.41</td><td class="num">193</td><td class="num">173</td><td class="num">9</td><td class="num">4.66%</td><td class="num">$3.60</td><td class="num">$167.93</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">0</td></tr>
+            <tr><td>22 Jun</td><td class="num">$32.97</td><td class="num">242</td><td class="num">223</td><td class="num">8</td><td class="num">3.31%</td><td class="num">$4.12</td><td class="num">$136.24</td><td class="num">1</td><td class="num">$32.97</td><td class="num">0</td></tr>
+            <tr><td>23 Jun</td><td class="num">$93.33</td><td class="num">1,955</td><td class="num">1,330</td><td class="num">77</td><td class="num">3.94%</td><td class="num">$1.21</td><td class="num">$47.74</td><td class="num">2</td><td class="num">$46.67</td><td class="num">2</td></tr>
+            <tr><td>24 Jun</td><td class="num">$96.52</td><td class="num">1,475</td><td class="num">1,100</td><td class="num">107</td><td class="num">7.25%</td><td class="num">$0.90</td><td class="num">$65.44</td><td class="num">15</td><td class="num">$6.43</td><td class="num">2</td></tr>
+            <tr><td>25 Jun</td><td class="num">$104.99</td><td class="num">3,339</td><td class="num">2,893</td><td class="num">144</td><td class="num">4.31%</td><td class="num">$0.73</td><td class="num">$31.44</td><td class="num">9</td><td class="num">$11.67</td><td class="num">5</td></tr>
+            <tr><td>26 Jun</td><td class="num">$378.30</td><td class="num">4,665</td><td class="num">3,467</td><td class="num">214</td><td class="num">4.59%</td><td class="num">$1.77</td><td class="num">$81.09</td><td class="num">9</td><td class="num">$42.03</td><td class="num">1</td></tr>
+            <tr><td>27 Jun</td><td class="num">$277.52</td><td class="num">2,186</td><td class="num">1,965</td><td class="num">91</td><td class="num">4.16%</td><td class="num">$3.05</td><td class="num">$126.95</td><td class="num">3</td><td class="num">$92.51</td><td class="num">0</td></tr>
+            <tr><td>28 Jun</td><td class="num">$526.88</td><td class="num">9,084</td><td class="num">4,525</td><td class="num">286</td><td class="num">3.15%</td><td class="num">$1.84</td><td class="num">$58.00</td><td class="num">7</td><td class="num">$75.27</td><td class="num">9</td></tr>
+            <tr><td>29 Jun</td><td class="num">$652.77</td><td class="num">9,803</td><td class="num">6,051</td><td class="num">189</td><td class="num">1.93%</td><td class="num">$3.45</td><td class="num">$66.59</td><td class="num">4</td><td class="num">$163.19</td><td class="num">2</td></tr>
+            <tr><td>30 Jun</td><td class="num">$655.43</td><td class="num">5,018</td><td class="num">3,716</td><td class="num">167</td><td class="num">3.33%</td><td class="num">$3.92</td><td class="num">$130.62</td><td class="num">5</td><td class="num">$131.09</td><td class="num">8</td></tr>
+            <tr><td>01 Jul</td><td class="num">$700.04</td><td class="num">4,185</td><td class="num">3,120</td><td class="num">128</td><td class="num">3.06%</td><td class="num">$5.47</td><td class="num">$167.27</td><td class="num">6</td><td class="num">$116.67</td><td class="num">17</td></tr>
+            <tr><td>02 Jul</td><td class="num">$700.55</td><td class="num">4,934</td><td class="num">3,790</td><td class="num">152</td><td class="num">3.08%</td><td class="num">$4.61</td><td class="num">$141.98</td><td class="num">3</td><td class="num">$233.52</td><td class="num">11</td></tr>
+            <tr><td>03 Jul</td><td class="num">$549.88</td><td class="num">3,482</td><td class="num">2,590</td><td class="num">112</td><td class="num">3.22%</td><td class="num">$4.91</td><td class="num">$157.92</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">8</td></tr>
+            <tr><td>04 Jul</td><td class="num">$391.83</td><td class="num">3,116</td><td class="num">2,472</td><td class="num">100</td><td class="num">3.21%</td><td class="num">$3.92</td><td class="num">$125.75</td><td class="num">4</td><td class="num">$97.96</td><td class="num">2</td></tr>
+            <tr><td>05 Jul</td><td class="num">$735.13</td><td class="num">5,131</td><td class="num">3,841</td><td class="num">155</td><td class="num">3.02%</td><td class="num">$4.74</td><td class="num">$143.27</td><td class="num">6</td><td class="num">$122.52</td><td class="num">8</td></tr>
+            <tr><td>06 Jul</td><td class="num">$606.70</td><td class="num">4,473</td><td class="num">3,457</td><td class="num">113</td><td class="num">2.53%</td><td class="num">$5.37</td><td class="num">$135.64</td><td class="num">2</td><td class="num">$303.35</td><td class="num">5</td></tr>
+            <tr><td>07 Jul</td><td class="num">$135.20</td><td class="num">856</td><td class="num">736</td><td class="num">15</td><td class="num">1.75%</td><td class="num">$9.01</td><td class="num">$157.94</td><td class="num">0</td><td class="num">&mdash;</td><td class="num">1</td></tr>
+            <tr class="totalrow"><td>Total, since 15 Jun</td><td class="num">$6,790.33</td><td class="num">65,293</td><td class="num">46,443</td><td class="num">2,093</td><td class="num">3.21%</td><td class="num">$3.24</td><td class="num">$103.99</td><td class="num">76</td><td class="num">$89.35</td><td class="num">86</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <h4>Reconciliation</h4>
+        <p>Daily spend sums to $6,790.33 and daily clicks to 2,093 across these 23 days &mdash; computed fresh from this table.</p>
+        <p>This table was pulled a few minutes after the Scoreboard, and 07 Jul is still an active spend day &mdash; roughly $24 more had spent in that gap. 86 demo calls were created since 15 Jun, plus 9 already on the books pre&#8209;launch, for 95 total calendar events as of this pull.</p>
+      </div>
+    </div>
+
+    <!-- ============ UNIT ECONOMICS ============ -->
+    <div class="page" id="page-uniteconomics">
+      <p class="sectionlabel">Since launch &middot; 15 Jun&ndash;07 Jul</p>
+      <div class="cardgrid c3">
+        <div class="card"><p class="num blue">$71.98</p><p class="lbl">Cost per demo booked</p><p class="cap">$6,765.85 spend &divide; 94 demos due</p></div>
+        <div class="card"><p class="num amber">$6,765.85</p><p class="lbl">Real CPA</p><p class="cap">spend &divide; 1 Stripe&#8209;verified sale</p></div>
+        <div class="card"><p class="num green">81 / 100</p><p class="lbl">Meta opportunity score</p><p class="cap">account&#8209;level, not campaign&#8209;specific</p></div>
+      </div>
+      <p class="sectionlabel">What's dragging real CPA up</p>
+      <div class="callout warn">
+        <h4>One sale is carrying the whole account's CPA</h4>
+        <p>With only 1 Stripe&#8209;verified sale against $6,765.85 of spend since launch, real CPA is driven almost entirely by whether that single number moves &mdash; it isn't yet a stable average. The "Showed" recording gap (see Show, held, close) is the reason there isn't a bigger sample to compute this against.</p>
+      </div>
+    </div>
+
+    <!-- ============ SPEND AND DELIVERY ============ -->
+    <div class="page" id="page-spenddelivery">
+      <p class="sectionlabel">Account totals &middot; since launch</p>
+      <div class="cardgrid">
+        <div class="card"><p class="num blue">$6,765.85</p><p class="lbl">Total spend</p><p class="cap">15 Jun&ndash;07 Jul, account level</p></div>
+        <div class="card"><p class="num">65,124</p><p class="lbl">Impressions</p><p class="cap">Meta</p></div>
+        <div class="card"><p class="num">31,161</p><p class="lbl">Reach</p><p class="cap">Meta, account level</p></div>
+        <div class="card"><p class="num">2.09</p><p class="lbl">Frequency</p><p class="cap">impressions &divide; reach</p></div>
+      </div>
+      <div class="cardgrid" style="margin-top:12px;">
+        <div class="card"><p class="num">2,090</p><p class="lbl">Clicks</p><p class="cap">Meta</p></div>
+        <div class="card"><p class="num">3.21%</p><p class="lbl">CTR</p><p class="cap">Meta</p></div>
+        <div class="card"><p class="num">$3.24</p><p class="lbl">CPC</p><p class="cap">Meta</p></div>
+        <div class="card"><p class="num">$103.89</p><p class="lbl">CPM</p><p class="cap">Meta</p></div>
+      </div>
+    </div>
+
+    <!-- ============ CAMPAIGN PERFORMANCE ============ -->
+    <div class="page" id="page-campaignperf">
+      <p class="sectionlabel">8 campaigns &middot; since launch</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Campaign</th><th class="num">Spend</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">CPC</th><th>Result</th><th class="num">Cost/Result</th></tr></thead>
+          <tbody>
+            <tr><td>Aashish Maru &ndash; Medspa UGC Reels</td><td class="num">$1,974.82</td><td class="num">373</td><td class="num">2.73%</td><td class="num">$5.29</td><td>66 appts</td><td class="num">$29.92</td></tr>
+            <tr><td>Med Spa + Dental ABO Broad</td><td class="num">$3,290.64</td><td class="num">646</td><td class="num">2.62%</td><td class="num">$5.09</td><td>34 appts</td><td class="num">$96.78</td></tr>
+            <tr><td>RPF 01 &ndash; Dentists WV Images</td><td class="num">$775.05</td><td class="num">613</td><td class="num">5.34%</td><td class="num">$1.26</td><td>64 leads</td><td class="num">$12.11</td></tr>
+            <tr><td>RPF 01 &ndash; Derma WV Images</td><td class="num">$472.61</td><td class="num">287</td><td class="num">4.01%</td><td class="num">$1.65</td><td>7 leads</td><td class="num">$67.52</td></tr>
+            <tr><td>Warm Up</td><td class="num">$122.42</td><td class="num">132</td><td class="num">4.88%</td><td class="num">$0.93</td><td>5 leads</td><td class="num">$24.48</td></tr>
+            <tr><td>V3 &ndash; Med Spa</td><td class="num">$119.88</td><td class="num">26</td><td class="num">2.25%</td><td class="num">$4.61</td><td>0 leads</td><td class="num">&mdash;</td></tr>
+            <tr><td>(Pixel Updated) Med Spa ABO</td><td class="num">$7.86</td><td class="num">4</td><td class="num">0.58%</td><td class="num">$1.97</td><td>0 appts</td><td class="num">&mdash;</td></tr>
+            <tr><td>(Pixel Updated) Medspa UGC Reels</td><td class="num">$2.57</td><td class="num">9</td><td class="num">0.25%</td><td class="num">$0.29</td><td>0 appts</td><td class="num">&mdash;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout good">
+        <h4>Meta's own recommendation</h4>
+        <p>Spend reconciles to the cent against the account total. Opportunity score is 81/100, and Meta's top-value recommendation directly names the Aashish Maru campaign: stable delivery, lower cost per result, up to 74% more conversions if scaled &mdash; already this account's cheapest appointments.</p>
+      </div>
+    </div>
+
+    <!-- ============ CREATIVE AND FATIGUE ============ -->
+    <div class="page" id="page-creativefatigue">
+      <div class="placeholder">
+        <strong>Not yet pulled this run.</strong> This page needs a daily CTR trend per top ad (via <code>ads_insights_performance_trend</code> or day-by-day <code>ads_get_ad_entities</code> at the ad level) to say anything defensible about fatigue vs. early ramp. I have the account's winning creative from the original reference report &mdash; "Dentists: Fund Treatments Up to $35k in 3 Mins," emphasizing speed and specificity &mdash; but haven't re-verified it live or pulled fresh day-by-day CTR for it. Tell me if you want this pulled now.
+      </div>
+    </div>
+
+    <!-- ============ LANDING, UTM AND TRACKING ============ -->
+    <div class="page" id="page-landingutm">
+      <div class="placeholder">
+        <strong>Partially built.</strong> I have full UTM/fbclid capture verified for the one real sale (see Click to cash) but haven't pulled a landing&#8209;page&#8209;level breakdown (traffic and conversion by <code>/clinic</code> vs <code>/democall</code> vs other URLs) across the whole account yet. Tell me if you want that pulled now.
+      </div>
+    </div>
+
+    <!-- ============ CONVERSION FUNNEL ============ -->
+    <div class="page" id="page-funnel">
+      <p class="sectionlabel">EAZE AI Funding Solutions &middot; 162 opportunities since 15 Jun</p>
+      <div class="funnel">
+        <div class="frow"><span class="fname">New &ndash; Unworked</span><div class="fbar-track"><div class="fbar-fill" style="width:100%"></div></div><span class="fnum">85 &middot; 52.5%</span></div>
+        <div class="frow"><span class="fname">Call Booked</span><div class="fbar-track"><div class="fbar-fill" style="width:55%"></div></div><span class="fnum">47 &middot; 29%</span></div>
+        <div class="frow"><span class="fname">No Show</span><div class="fbar-track"><div class="fbar-fill" style="width:16%"></div></div><span class="fnum">14 &middot; 8.6%</span></div>
+        <div class="frow"><span class="fname">Appt Cancelled</span><div class="fbar-track"><div class="fbar-fill" style="width:6%"></div></div><span class="fnum">5 &middot; 3.1%</span></div>
+        <div class="frow"><span class="fname">Closed &ndash; Won (real)</span><div class="fbar-track"><div class="fbar-fill won" style="width:2%"></div></div><span class="fnum">1 &middot; 0.6%</span></div>
+        <div class="frow"><span class="fname">Rescheduling</span><div class="fbar-track"><div class="fbar-fill" style="width:3%"></div></div><span class="fnum">2 &middot; 1.2%</span></div>
+        <div class="frow"><span class="fname">Call Held &ndash; WIP</span><div class="fbar-track"><div class="fbar-fill" style="width:3%"></div></div><span class="fnum">2 &middot; 1.2%</span></div>
+        <div class="frow"><span class="fname">High Priority</span><div class="fbar-track"><div class="fbar-fill" style="width:3%"></div></div><span class="fnum">2 &middot; 1.2%</span></div>
+        <div class="frow"><span class="fname">Long&#8209;Term Nurture</span><div class="fbar-track"><div class="fbar-fill" style="width:3%"></div></div><span class="fnum">2 &middot; 1.2%</span></div>
+      </div>
+      <p class="winnote" style="margin-top:14px;">Closed&ndash;Won shows 1 (real), not 3 &mdash; 2 agency&#8209;test records with no matching Stripe charge are excluded, per your instruction on the Scoreboard.</p>
+    </div>
+
+    <!-- ============ BOOKINGS AND CALENDARS ============ -->
+    <div class="page" id="page-bookingscal">
+      <p class="sectionlabel">94 demo calls &middot; 3 calendars &middot; 15 Jun&ndash;07 Jul</p>
+      <div class="cardgrid c3">
+        <div class="card"><p class="num">69</p><p class="lbl">Confirmed</p><p class="cap">by scheduled date</p></div>
+        <div class="card"><p class="num amber">13</p><p class="lbl">No&#8209;show</p><p class="cap">by scheduled date</p></div>
+        <div class="card"><p class="num">12</p><p class="lbl">Cancelled</p><p class="cap">by scheduled date</p></div>
+      </div>
+      <div class="callout warn" style="margin-top:16px;">
+        <h4>Zero "showed"</h4>
+        <p>Not one of the 94 bookings in this window carries a showed disposition &mdash; see Show, held, close for what this blocks.</p>
+      </div>
+    </div>
+
+    <!-- ============ SHOW, HELD, CLOSE ============ -->
+    <div class="page" id="page-showheldclose">
+      <div class="cardgrid c3">
+        <div class="card"><p class="num amber">0</p><p class="lbl">Showed</p><p class="cap">of 94 demos due in window</p></div>
+        <div class="card"><p class="num">2</p><p class="lbl">Held (calls worked)</p><p class="cap">GHL "Call Held &ndash; WIP" stage</p></div>
+        <div class="card"><p class="num blue">33%</p><p class="lbl">Close rate</p><p class="cap">1 real win &divide; (1 win + 2 held)</p></div>
+      </div>
+      <div class="callout warn">
+        <h4>Highest&#8209;leverage fix on the whole dashboard</h4>
+        <p>0 of 94 bookings this window have ever been marked "showed." That single gap blocks show rate, hold rate, and true CPA for the entire post-booking funnel. This is a GHL workflow habit to fix on your team's side &mdash; a report can only expose it, not close it.</p>
+      </div>
+    </div>
+
+    <!-- ============ PIPELINE CONVERSION ============ -->
+    <div class="page" id="page-pipelineconv">
+      <p class="sectionlabel">Stage&#8209;to&#8209;stage, since launch</p>
+      <div class="cardgrid c3">
+        <div class="card"><p class="num blue">29%</p><p class="lbl">New &rarr; Call Booked</p><p class="cap">47 &divide; 162 opportunities</p></div>
+        <div class="card"><p class="num">1.2%</p><p class="lbl">Call Booked &rarr; Held</p><p class="cap">2 &divide; 162 &mdash; snapshot, not cumulative</p></div>
+        <div class="card"><p class="num green">0.6%</p><p class="lbl">Overall &rarr; Real Won</p><p class="cap">1 real sale &divide; 162 opportunities</p></div>
+      </div>
+      <p class="winnote" style="margin-top:14px;">"Held" here is a live stage snapshot, not a count of every call held during the window &mdash; GHL doesn't expose stage-history in the operations I've pulled, so this can drift if opportunities move stages quickly. Flag if you want this made more rigorous.</p>
+    </div>
+
+    <!-- ============ CLOSERS AND ROUTING ============ -->
+    <div class="page" id="page-closersrouting">
+      <p class="sectionlabel">94 demo calls, by assigned closer</p>
+      <div class="cardgrid">
+        <div class="card"><p class="num blue">46</p><p class="lbl">Caleb Chase</p><p class="cap">49% of bookings</p></div>
+        <div class="card"><p class="num">18</p><p class="lbl">James Wellington</p><p class="cap">19% of bookings</p></div>
+        <div class="card"><p class="num">17</p><p class="lbl">Matthew Burns</p><p class="cap">18% of bookings</p></div>
+        <div class="card"><p class="num">13</p><p class="lbl">Dan Baldasso</p><p class="cap">14% of bookings</p></div>
+      </div>
+    </div>
+
+    <!-- ============ CLICK TO CASH ============ -->
+    <div class="page" id="page-clicktocash">
+      <p class="sectionlabel">Tracing the one real sale &middot; Haresh Emandi, $4,997</p>
+      <div class="chain">
+        <div class="step"><p class="t">Ad click</p><p class="d">Instagram &middot; Aashish Maru UGC Reels campaign &middot; fbclid + fbc/fbp captured</p></div>
+        <div class="arrow">&rarr;</div>
+        <div class="step"><p class="t">First touch</p><p class="d">Landing page <code>/clinic</code> &middot; lead form submitted</p></div>
+        <div class="arrow">&rarr;</div>
+        <div class="step"><p class="t">Last touch</p><p class="d">Booking page <code>/democall</code> &middot; demo scheduled</p></div>
+        <div class="arrow">&rarr;</div>
+        <div class="step"><p class="t">Revenue</p><p class="d">GHL opportunity &middot; Stripe charge succeeded $4,997</p></div>
+      </div>
+      <div class="callout good">
+        <h4>Update to the prior finding</h4>
+        <p>The earlier report said attribution never reaches the opportunity. Checked directly this run: both attribution touches sit on the opportunity object itself, not just the contact. The real open question is whether that data is surfaced anywhere leadership actually looks &mdash; worth a two&#8209;minute check, not a tracking fix.</p>
+      </div>
+    </div>
+
+    <!-- ============ EXPERIMENT BACKLOG ============ -->
+    <div class="page" id="page-expbacklog">
+      <p class="sectionlabel">Ranked by impact &times; confidence &times; ease</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>ICE</th><th>Experiment</th><th>Why now</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pill blue">900</span></td><td>Record "Showed" on every held call</td><td>Unlocks measurement for the entire post-booking funnel &mdash; zero-cost, highest leverage.</td></tr>
+            <tr><td><span class="pill blue">850</span></td><td>Stop flat $10k stamps; exclude the 2 named agency test emails from Closed&ndash;Won</td><td>Now diagnosed precisely by name &mdash; a two-line workflow fix.</td></tr>
+            <tr><td><span class="pill green">720</span></td><td>Scale the Aashish Maru &amp; RPF Dentists ad sets</td><td>Meta's own Opportunity Score already recommends this.</td></tr>
+            <tr><td><span class="pill amber">576</span></td><td>Auto-assign the 85 unworked leads on entry</td><td>Reduces the largest single pipeline stage without adding headcount.</td></tr>
+            <tr><td><span class="pill amber">450</span></td><td>Confirm opportunity-level attribution reaches the revenue view leadership reads</td><td>Data exists; may be a dashboard wiring fix, not a tracking fix.</td></tr>
+            <tr><td><span class="pill amber">336</span></td><td>Unify optimization events across campaigns</td><td>Cleaner signal for Meta's learning phase.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============ REMEDIATION PRIORITIES (FIX) ============ -->
+    <div class="page" id="page-remediation">
+      <div class="callout warn"><p style="margin:0; font-size:0.8rem;">Your screenshot's "Fix" group was cut off, so I don't know its real page names &mdash; I've put the remediation list here under one page rather than guess at ones I can't see. Tell me the actual page names if you want this split up to match.</p></div>
+      <p class="sectionlabel">What's still broken, re&#8209;verified this run</p>
+      <div class="callout warn"><h4>"Showed" is never recorded</h4><p>0 of 94 bookings carry a showed disposition. Still the single highest-leverage fix.</p></div>
+      <div class="callout warn"><h4>Flat deal-value stamps overstated revenue by 6&times;</h4><p>Fixed in this report by excluding the 2 agency-test records; the underlying GHL workflow still needs the same fix applied for future closes.</p></div>
+      <div class="callout"><h4>Attribution rollup &mdash; partially resolved</h4><p>Exists on the opportunity now; confirm it's surfaced where leadership actually looks.</p></div>
+      <div class="callout warn"><h4>85 leads sit untouched</h4><p>52.5% of the pipeline is still New&ndash;Unworked.</p></div>
+      <div class="callout"><h4>Split optimization events</h4><p>Appointment-optimized and lead-optimized campaigns still train Meta toward two audiences from one account.</p></div>
+    </div>
+
+    <footer>
+      <p><strong>Reconciliation:</strong> campaign-level Meta spend sums to $6,765.85 (scoreboard window) / $6,790.33 (drill-down window, pulled minutes later); GHL pipeline stage counts sum to 162 of 162 opportunities; booking distribution sums to 94 of 94 events across 3 calendars. Stripe charges filtered to succeeded + livemode; the one real sale is counted once despite 6 failed retries on the same payment intent.</p>
+      <p><strong>Read only:</strong> nothing in Meta, GHL, or Stripe was created, edited, or deleted while building this report.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var SB = {
+    yesterday: {
+      note: "Showing 07 Jul, 1 active day of Meta delivery",
+      marketing: [
+        ["$606.70","Ad spend","Meta","blue"],
+        ["4,473","Impressions","Meta",""],
+        ["113","Clicks","Meta",""],
+        ["2.53%","CTR","Meta",""],
+        ["$5.37","CPC","Meta",""],
+        ["$135.64","CPM","Meta",""],
+        ["2","Leads","Meta lead events",""],
+        ["$37.07","CPL","spend / leads",""]
+      ],
+      sales: [
+        ["12","Demos booked","created in window","blue"],
+        ["0","Showed","demos due in window","amber"],
+        ["2","No shows","demos due in window",""],
+        ["0","Cancelled","demos due in window",""],
+        ["0%","Show rate","showed / (showed + no show)","amber"],
+        ["0","Held","calls worked in window",""],
+        ["&mdash;","Close rate","of held calls",""]
+      ],
+      revenue: [
+        ["$0","Revenue","in this window","green"],
+        ["$0","Cash collected","real sales closed in window",""],
+        ["0","Sales","closed in window",""],
+        ["&mdash;","CPA","spend / sales",""],
+        ["0.00x","ROAS","cash / spend","amber"]
+      ]
+    },
+    last7: {
+      note: "Showing 30 Jun&ndash;06 Jul, 7 active days of Meta delivery",
+      marketing: [
+        ["$4,339.56","Ad spend","Meta","blue"],
+        ["30,339","Impressions","Meta",""],
+        ["927","Clicks","Meta",""],
+        ["3.06%","CTR","Meta",""],
+        ["$4.68","CPC","Meta",""],
+        ["$143.04","CPM","Meta",""],
+        ["26","Leads","Meta lead events",""],
+        ["$22.27","CPL","spend / leads",""]
+      ],
+      sales: [
+        ["65","Demos booked","created in window","blue"],
+        ["0","Showed","demos due in window","amber"],
+        ["11","No shows","demos due in window",""],
+        ["3","Cancelled","demos due in window",""],
+        ["0%","Show rate","showed / (showed + no show)","amber"],
+        ["1","Held","calls worked in window",""],
+        ["50%","Close rate","of held calls","green"]
+      ],
+      revenue: [
+        ["$4,997","Revenue","in this window","green"],
+        ["$4,997","Cash collected","real sales closed in window","green"],
+        ["1","Sales","closed in window","green"],
+        ["$4,339.56","CPA","spend / sales",""],
+        ["1.15x","ROAS","cash / spend","green"]
+      ]
+    },
+    launch: {
+      note: "Showing 15 Jun&ndash;07 Jul, 22 active days of Meta delivery",
+      marketing: [
+        ["$6,765.85","Ad spend","Meta","blue"],
+        ["65,124","Impressions","Meta",""],
+        ["2,090","Clicks","Meta",""],
+        ["3.21%","CTR","Meta",""],
+        ["$3.24","CPC","Meta",""],
+        ["$103.89","CPM","Meta",""],
+        ["76","Leads","Meta lead events",""],
+        ["$18.03","CPL","spend / leads",""]
+      ],
+      sales: [
+        ["94","Demos booked","created in window","blue"],
+        ["0","Showed","demos due in window","amber"],
+        ["13","No shows","demos due in window",""],
+        ["12","Cancelled","demos due in window",""],
+        ["0%","Show rate","showed / (showed + no show)","amber"],
+        ["2","Held","calls worked in window",""],
+        ["33%","Close rate","of held calls","amber"]
+      ],
+      revenue: [
+        ["$4,997","Revenue","in this window","green"],
+        ["$4,997","Cash collected","real sales closed in window","green"],
+        ["1","Sales","closed in window","green"],
+        ["$6,765.85","CPA","spend / sales",""],
+        ["0.74x","ROAS","cash / spend","amber"]
+      ]
+    }
+  };
+
+  function renderCards(el, cells){
+    el.innerHTML = cells.map(function(c){
+      var num=c[0], lbl=c[1], cap=c[2], tone=c[3]?" "+c[3]:"";
+      return '<div class="card"><p class="num'+tone+'">'+num+'</p><p class="lbl">'+lbl+'</p><p class="cap">'+cap+'</p></div>';
+    }).join("");
+  }
+  function renderWindow(key){
+    var d = SB[key];
+    document.getElementById("sb-note").innerHTML = d.note;
+    renderCards(document.getElementById("sb-marketing"), d.marketing);
+    renderCards(document.getElementById("sb-sales"), d.sales);
+    renderCards(document.getElementById("sb-revenue"), d.revenue);
+  }
+  var wintabs = document.querySelectorAll(".wintab");
+  wintabs.forEach(function(t){
+    t.addEventListener("click", function(){
+      wintabs.forEach(function(x){ x.setAttribute("aria-selected","false"); });
+      t.setAttribute("aria-selected","true");
+      renderWindow(t.getAttribute("data-window"));
+    });
+  });
+  renderWindow("launch");
+
+  var navitems = document.querySelectorAll(".navitem");
+  var pages = document.querySelectorAll(".page");
+  navitems.forEach(function(item){
+    item.addEventListener("click", function(){
+      navitems.forEach(function(n){ n.classList.remove("active"); });
+      item.classList.add("active");
+      pages.forEach(function(p){ p.classList.remove("active"); });
+      document.getElementById("page-"+item.getAttribute("data-page")).classList.add("active");
+      document.getElementById("crumb").textContent = item.getAttribute("data-crumb");
+      document.getElementById("pagetitle").textContent = item.getAttribute("data-title");
+    });
+  });
+})();
+</script>

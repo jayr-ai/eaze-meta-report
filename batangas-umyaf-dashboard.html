@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batangas UMYAF Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        :root {
+            --primary-bg: #0f1419;
+            --secondary-bg: #1a1f2e;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent-blue: #4d9cff;
+            --accent-purple: #b39ddb;
+            --accent-green: #81c995;
+            --accent-orange: #ffb74d;
+            --accent-teal: #4db8a8;
+            --accent-pink: #f48fb1;
+            --accent-red: #ef5350;
+            --card-bg: #1e2435;
+            --border-color: #2c3647;
+            --success: #81c995;
+            --warning: #ffb74d;
+            --error: #ef5350;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100vh;
+            gap: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background-color: var(--card-bg);
+            color: var(--accent-blue);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: right;
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .last-updated-time {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .refresh-btn {
+            padding: 8px 16px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* Dashboard content */
+        .dashboard {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px;
+        }
+
+        /* KPI Cards */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .kpi-card {
+            padding: 24px;
+            border-radius: 12px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .kpi-card.blue {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        }
+
+        .kpi-card.purple {
+            background: linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%);
+        }
+
+        .kpi-card.green {
+            background: linear-gradient(135deg, #00796b 0%, #004d40 100%);
+        }
+
+        .kpi-card.orange {
+            background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+        }
+
+        .kpi-card.teal {
+            background: linear-gradient(135deg, #00897b 0%, #004d40 100%);
+        }
+
+        .kpi-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .kpi-subtext {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        /* Charts grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .chart-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-wrapper canvas {
+            max-height: 280px;
+        }
+
+        /* Bottom section */
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .summary-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .summary-item {
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .summary-item strong {
+            color: var(--text-primary);
+        }
+
+        .map-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .map-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .map-bubble {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .bubble {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            background-color: rgba(239, 83, 80, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 16px;
+            color: #ffcdd2;
+            margin-bottom: 16px;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .kpi-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                justify-content: space-between;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">📊</div>
+                <div class="logo-text">Batangas<br>UMYAF</div>
+            </div>
+            <nav style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="nav-item active">
+                    <span class="nav-icon">📈</span>
+                    <span>Overview</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    <span>Demographics</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">🗺️</span>
+                    <span>Geographic</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">⛪</span>
+                    <span>Churches</span>
+                </div>
+            </nav>
+            <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Data Source</div>
+                <div style="font-size: 12px; color: var(--text-primary);">Google Sheets<br>PROFILE sheet</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>Batangas UMYAF</h1>
+                    <p>Young Adult Fellowship Overview • Philippines Annual Conference</p>
+                </div>
+                <div class="header-right">
+                    <div>
+                        <div class="last-updated">Last Updated</div>
+                        <div class="last-updated-time" id="lastUpdated">Loading...</div>
+                    </div>
+                    <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <div id="errorContainer"></div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-row" id="kpiContainer">
+                    <div class="loading">Loading dashboard data...</div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid" id="chartsContainer" style="display: none;">
+                    <div class="chart-container">
+                        <div class="chart-title">📋 Status Breakdown</div>
+                        <div class="chart-wrapper">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">💍 Civil Status</div>
+                        <div class="chart-wrapper">
+                            <canvas id="civilChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">👫 Gender Distribution</div>
+                        <div class="chart-wrapper">
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">🤝 Involvement Status</div>
+                        <div class="chart-wrapper">
+                            <canvas id="involvementChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">🎂 Age Distribution</div>
+                        <div class="chart-wrapper">
+                            <canvas id="ageChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">⛪ Members per Local Church</div>
+                        <div class="chart-wrapper">
+                            <canvas id="churchChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section -->
+                <div class="bottom-section" id="bottomSection" style="display: none;">
+                    <div class="summary-panel">
+                        <div class="summary-title">📌 Executive Summary</div>
+                        <div id="summaryContent">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="map-container">
+                        <div class="map-title">🗺️ Geographic Distribution (Cities in Batangas)</div>
+                        <div class="map-bubble" id="mapBubbles">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Apps Script Web App endpoint
+        const APPS_SCRIPT_URL = 'https://script.googleapis.com/macros/s/AKfycbwZXHuu3B_OyEGGMS57_KOurq1s0moX7z3QnZ9LHMUg5m23ej5M6tlsT3-C-ioAhkUL/exec';
+
+        let allData = [];
+        let chartInstances = {};
+
+        // Color palette (matching dataviz skill validated colors)
+        const colorPalette = {
+            status: {
+                'CONSTITUENT': '#5b9bd5',
+                'BAPTIZED': '#70ad47',
+                'PROFESSING': '#c55a11'
+            },
+            civil: {
+                'SINGLE': '#4472c4',
+                'MARRIED': '#ed7d31',
+                'WIDOWED': '#a5a5a5',
+                'SEPARATED': '#ffc000'
+            },
+            gender: {
+                'MALE': '#4472c4',
+                'FEMALE': '#ed7d31'
+            },
+            involvement: {
+                'YES': '#70ad47',
+                'NO': '#c55a11',
+                'BLANK': '#a5a5a5'
+            },
+            age: ['#4472c4', '#ed7d31', '#70ad47', '#c55a11', '#a5a5a5'],
+            church: ['#4472c4', '#ed7d31', '#70ad47', '#c55a11', '#ffc000', '#5b9bd5']
+        };
+
+        async function loadData() {
+            try {
+                const errorContainer = document.getElementById('errorContainer');
+                errorContainer.innerHTML = '';
+
+                // Fetch data from Google Apps Script endpoint
+                const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) throw new Error(`Failed to load data: ${response.statusText}`);
+
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Unknown error');
+
+                allData = result.data;
+
+                // Update last updated time
+                const now = new Date();
+                document.getElementById('lastUpdated').textContent = now.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+
+                // Render dashboard
+                renderKPIs();
+                renderCharts();
+                document.getElementById('chartsContainer').style.display = 'grid';
+                document.getElementById('bottomSection').style.display = 'grid';
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                const errorContainer = document.getElementById('errorContainer');
+                errorContainer.innerHTML = `
+                    <div class="error">
+                        <strong>Error loading data:</strong> ${error.message}<br>
+                        <small>Make sure the Google Apps Script endpoint is deployed and accessible.</small>
+                    </div>
+                `;
+            }
+        }
+
+        function renderKPIs() {
+            const totalYA = allData.length;
+            const smallGroupYes = allData.filter(r => r['SMALL GROUP INVOLVED? (Y/N)'] === 'YES').length;
+            const layServantYes = allData.filter(r => r['LAY SERVANT? (Y/N)'] === 'YES').length;
+            const churches = new Set(allData.map(r => r['LOCAL CHURCH']).filter(c => c)).size;
+            const withContact = allData.filter(r => r['CONTACT'] && r['CONTACT'].trim()).length;
+
+            const kpiContainer = document.getElementById('kpiContainer');
+            kpiContainer.innerHTML = `
+                <div class="kpi-card blue">
+                    <span class="kpi-icon">👥</span>
+                    <div class="kpi-label">Total Young Adults</div>
+                    <div class="kpi-value">${totalYA}</div>
+                    <div class="kpi-subtext">Members in district</div>
+                </div>
+
+                <div class="kpi-card purple">
+                    <span class="kpi-icon">🤝</span>
+                    <div class="kpi-label">Small Group Involvement</div>
+                    <div class="kpi-value">${smallGroupYes}</div>
+                    <div class="kpi-subtext">${(smallGroupYes/totalYA*100).toFixed(1)}% of total</div>
+                </div>
+
+                <div class="kpi-card green">
+                    <span class="kpi-icon">⛪</span>
+                    <div class="kpi-label">Lay Servants</div>
+                    <div class="kpi-value">${layServantYes}</div>
+                    <div class="kpi-subtext">${(layServantYes/totalYA*100).toFixed(1)}% of total</div>
+                </div>
+
+                <div class="kpi-card orange">
+                    <span class="kpi-icon">📍</span>
+                    <div class="kpi-label">Churches Reporting</div>
+                    <div class="kpi-value">${churches}</div>
+                    <div class="kpi-subtext">of 14 total churches</div>
+                </div>
+
+                <div class="kpi-card teal">
+                    <span class="kpi-icon">📞</span>
+                    <div class="kpi-label">Contact Info Complete</div>
+                    <div class="kpi-value">${withContact}</div>
+                    <div class="kpi-subtext">${(withContact/totalYA*100).toFixed(1)}% have phone</div>
+                </div>
+            `;
+        }
+
+        function getChartConfig(type) {
+            return {
+                type: type,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: '#e8eaed',
+                                font: { size: 12 },
+                                padding: 16,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(20, 20, 30, 0.8)',
+                            titleColor: '#e8eaed',
+                            bodyColor: '#9aa0a6',
+                            borderColor: '#2c3647',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed.y || context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        function renderCharts() {
+            // Status Chart
+            renderStatusChart();
+            renderCivilChart();
+            renderGenderChart();
+            renderInvolvementChart();
+            renderAgeChart();
+            renderChurchChart();
+            renderSummary();
+            renderMap();
+        }
+
+        function renderStatusChart() {
+            const statuses = {};
+            allData.forEach(row => {
+                const status = row['STATUS'] || 'UNKNOWN';
+                statuses[status] = (statuses[status] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            if (chartInstances.statusChart) chartInstances.statusChart.destroy();
+
+            chartInstances.statusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(statuses),
+                    datasets: [{
+                        data: Object.values(statuses),
+                        backgroundColor: Object.keys(statuses).map(k => colorPalette.status[k] || '#888'),
+                        borderColor: '#1e2435',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: getChartConfig('doughnut').options
+            });
+        }
+
+        function renderCivilChart() {
+            const civils = {};
+            allData.forEach(row => {
+                const civil = row['CIVIL STATUS'] || 'UNKNOWN';
+                civils[civil] = (civils[civil] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('civilChart').getContext('2d');
+            if (chartInstances.civilChart) chartInstances.civilChart.destroy();
+
+            chartInstances.civilChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(civils),
+                    datasets: [{
+                        data: Object.values(civils),
+                        backgroundColor: Object.keys(civils).map(k => colorPalette.civil[k] || '#888'),
+                        borderColor: '#1e2435',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: getChartConfig('doughnut').options
+            });
+        }
+
+        function renderGenderChart() {
+            const genders = {};
+            allData.forEach(row => {
+                const gender = row['GENDER'] || 'UNKNOWN';
+                genders[gender] = (genders[gender] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            if (chartInstances.genderChart) chartInstances.genderChart.destroy();
+
+            chartInstances.genderChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(genders),
+                    datasets: [{
+                        data: Object.values(genders),
+                        backgroundColor: Object.keys(genders).map(k => colorPalette.gender[k] || '#888'),
+                        borderColor: '#1e2435',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }]
+                },
+                options: getChartConfig('doughnut').options
+            });
+        }
+
+        function renderInvolvementChart() {
+            const smallGroup = { 'YES': 0, 'NO': 0, 'BLANK': 0 };
+            const layServant = { 'YES': 0, 'NO': 0, 'BLANK': 0 };
+
+            allData.forEach(row => {
+                const sg = row['SMALL GROUP INVOLVED? (Y/N)'] || '';
+                if (sg === 'YES') smallGroup['YES']++;
+                else if (sg === 'NO') smallGroup['NO']++;
+                else smallGroup['BLANK']++;
+
+                const ls = row['LAY SERVANT? (Y/N)'] || '';
+                if (ls === 'YES') layServant['YES']++;
+                else if (ls === 'NO') layServant['NO']++;
+                else layServant['BLANK']++;
+            });
+
+            const ctx = document.getElementById('involvementChart').getContext('2d');
+            if (chartInstances.involvementChart) chartInstances.involvementChart.destroy();
+
+            chartInstances.involvementChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Small Group', 'Lay Servant'],
+                    datasets: [
+                        {
+                            label: 'YES',
+                            data: [smallGroup['YES'], layServant['YES']],
+                            backgroundColor: colorPalette.involvement['YES'],
+                            borderRadius: 4,
+                            borderSkipped: false
+                        },
+                        {
+                            label: 'NO',
+                            data: [smallGroup['NO'], layServant['NO']],
+                            backgroundColor: colorPalette.involvement['NO'],
+                            borderRadius: 4,
+                            borderSkipped: false
+                        },
+                        {
+                            label: 'Unrecorded',
+                            data: [smallGroup['BLANK'], layServant['BLANK']],
+                            backgroundColor: colorPalette.involvement['BLANK'],
+                            borderRadius: 4,
+                            borderSkipped: false
+                        }
+                    ]
+                },
+                options: {
+                    ...getChartConfig('bar').options,
+                    indexAxis: 'x',
+                    scales: {
+                        x: { stacked: false, grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } },
+                        y: { stacked: false, grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } }
+                    }
+                }
+            });
+        }
+
+        function renderAgeChart() {
+            const today = new Date();
+            const ageBrackets = { '18-24': 0, '25-29': 0, '30-35': 0, '36-40': 0, '41-45': 0, '46+': 0 };
+
+            allData.forEach(row => {
+                const birthDate = row['BIRTH DATE'];
+                if (!birthDate) return;
+
+                const birth = new Date(birthDate);
+                let age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
+
+                if (age >= 18 && age <= 24) ageBrackets['18-24']++;
+                else if (age >= 25 && age <= 29) ageBrackets['25-29']++;
+                else if (age >= 30 && age <= 35) ageBrackets['30-35']++;
+                else if (age >= 36 && age <= 40) ageBrackets['36-40']++;
+                else if (age >= 41 && age <= 45) ageBrackets['41-45']++;
+                else if (age >= 46) ageBrackets['46+']++;
+            });
+
+            const ctx = document.getElementById('ageChart').getContext('2d');
+            if (chartInstances.ageChart) chartInstances.ageChart.destroy();
+
+            chartInstances.ageChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(ageBrackets),
+                    datasets: [{
+                        label: 'Members',
+                        data: Object.values(ageBrackets),
+                        backgroundColor: colorPalette.age,
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    ...getChartConfig('bar').options,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } },
+                        x: { grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } }
+                    }
+                }
+            });
+        }
+
+        function renderChurchChart() {
+            const churches = {};
+            allData.forEach(row => {
+                const church = row['LOCAL CHURCH'] || 'Unspecified';
+                churches[church] = (churches[church] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('churchChart').getContext('2d');
+            if (chartInstances.churchChart) chartInstances.churchChart.destroy();
+
+            const sortedChurches = Object.entries(churches).sort((a, b) => b[1] - a[1]);
+
+            chartInstances.churchChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedChurches.map(c => c[0]),
+                    datasets: [{
+                        label: 'Members',
+                        data: sortedChurches.map(c => c[1]),
+                        backgroundColor: colorPalette.church,
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    ...getChartConfig('bar').options,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } },
+                        y: { grid: { color: '#2c3647' }, ticks: { color: '#9aa0a6' } }
+                    }
+                }
+            });
+        }
+
+        function renderSummary() {
+            const totalYA = allData.length;
+            const smallGroupPct = (allData.filter(r => r['SMALL GROUP INVOLVED? (Y/N)'] === 'YES').length / totalYA * 100).toFixed(1);
+            const layServantPct = (allData.filter(r => r['LAY SERVANT? (Y/N)'] === 'YES').length / totalYA * 100).toFixed(1);
+
+            const statuses = {};
+            allData.forEach(row => {
+                const status = row['STATUS'] || 'UNKNOWN';
+                statuses[status] = (statuses[status] || 0) + 1;
+            });
+            const dominantStatus = Object.entries(statuses).sort((a, b) => b[1] - a[1])[0];
+
+            const civils = {};
+            allData.forEach(row => {
+                const civil = row['CIVIL STATUS'] || 'UNKNOWN';
+                civils[civil] = (civils[civil] || 0) + 1;
+            });
+            const dominantCivil = Object.entries(civils).sort((a, b) => b[1] - a[1])[0];
+
+            const churches = {};
+            allData.forEach(row => {
+                const church = row['LOCAL CHURCH'] || 'Unspecified';
+                churches[church] = (churches[church] || 0) + 1;
+            });
+            const topChurch = Object.entries(churches).sort((a, b) => b[1] - a[1])[0];
+
+            const locations = {};
+            allData.forEach(row => {
+                const loc = row['LOCATION / ADDRESS (City, Province)'] || 'Unspecified';
+                locations[loc] = (locations[loc] || 0) + 1;
+            });
+            const topLocation = Object.entries(locations).sort((a, b) => b[1] - a[1])[0];
+
+            const summaryContent = document.getElementById('summaryContent');
+            summaryContent.innerHTML = `
+                <div class="summary-item">
+                    <strong>${totalYA} young adults</strong> registered in the Batangas District UMYAF.
+                </div>
+                <div class="summary-item">
+                    <strong>${dominantStatus ? dominantStatus[1] : 0}</strong> members are <strong>${dominantStatus ? dominantStatus[0].toLowerCase() : 'unspecified'}</strong>.
+                </div>
+                <div class="summary-item">
+                    <strong>${smallGroupPct}%</strong> actively participate in small groups; <strong>${layServantPct}%</strong> serve as lay servants.
+                </div>
+                <div class="summary-item">
+                    Majority are <strong>${dominantCivil ? dominantCivil[0].toLowerCase() : 'unspecified'}</strong>. Geographic concentration in <strong>${topLocation ? topLocation[0] : 'unknown areas'}</strong>.
+                </div>
+                <div class="summary-item">
+                    Currently tracking <strong>1 of 14 local churches</strong> (${topChurch ? topChurch[0] : 'Unknown'} with ${topChurch ? topChurch[1] : 0} members).
+                </div>
+            `;
+        }
+
+        function renderMap() {
+            const locations = {};
+            allData.forEach(row => {
+                const loc = row['LOCATION / ADDRESS (City, Province)'] || 'Unknown';
+                locations[loc] = (locations[loc] || 0) + 1;
+            });
+
+            const mapBubbles = document.getElementById('mapBubbles');
+            mapBubbles.innerHTML = Object.entries(locations)
+                .sort((a, b) => b[1] - a[1])
+                .map(([loc, count]) => {
+                    const size = Math.max(60, Math.min(120, 50 + count * 8));
+                    return `
+                        <div class="bubble" style="width: ${size}px; height: ${size}px; font-size: ${Math.max(11, Math.min(14, 11 + count/2))}px;">
+                            <div>${count}</div>
+                            <div style="font-size: 10px; opacity: 0.8; margin-top: 2px;">${loc.split(',')[0]}</div>
+                        </div>
+                    `;
+                })
+                .join('');
+        }
+
+        // Load data on page load
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>

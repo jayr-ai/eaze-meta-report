@@ -1391,14 +1391,23 @@
          */
         async function renderGeoMap() {
             try {
-                console.log('renderGeoMap called, allData length:', allData.length);
+                window.console.log('renderGeoMap: START');
 
                 // Build city count map from data
                 const { cityMap, unmatchedLocations } = buildCityCountMap();
-                console.log('cityMap built:', cityMap);
+                window.console.log('renderGeoMap: cityMap built');
+
+                // Check if map element exists
+                const mapEl = document.getElementById('map');
+                if (!mapEl) {
+                  window.console.error('renderGeoMap: map element not found');
+                  return;
+                }
+                window.console.log('renderGeoMap: map element found');
 
                 // Fetch and cache GeoJSON
                 const geoJsonData = await fetchGeojsonData();
+                window.console.log('renderGeoMap: GeoJSON fetched');
 
                 // Calculate min/max for color interpolation (excluding 0)
                 const nonZeroCounts = Object.values(cityMap).filter(c => c > 0);

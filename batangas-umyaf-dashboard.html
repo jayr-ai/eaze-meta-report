@@ -1562,8 +1562,11 @@
 
             } catch (error) {
                 console.error('Error rendering geographic map:', error);
+                console.error('Error stack:', error.stack);
                 const mapContainer = document.getElementById('map');
-                mapContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--error);">Failed to load map data: ${error.message}</div>`;
+                if (mapContainer) {
+                    mapContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--error);">Failed to load map data: ${error.message}</div>`;
+                }
             }
         }
 

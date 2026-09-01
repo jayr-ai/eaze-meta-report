@@ -1565,6 +1565,14 @@
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const panelName = this.getAttribute('data-panel');
+                    const targetPanelId = panelName + 'Panel';
+                    const targetPanel = document.getElementById(targetPanelId);
+
+                    // Only proceed if the panel exists
+                    if (!targetPanel) {
+                        console.log('Panel not found:', targetPanelId);
+                        return;
+                    }
 
                     // Update nav active state
                     navItems.forEach(n => n.classList.remove('active'));
@@ -1575,21 +1583,12 @@
                     allPanels.forEach(panel => panel.classList.remove('active'));
 
                     // Show selected panel
-                    const targetPanel = document.getElementById(panelName + 'Panel');
-                    if (targetPanel) {
-                        targetPanel.classList.add('active');
-                    }
+                    targetPanel.classList.add('active');
 
                     // Render map when Geographic panel is clicked
-                    console.log('Panel clicked:', panelName);
                     if (panelName === 'geographic') {
-                        console.log('Geographic panel detected, calling renderGeoMap');
-                        renderGeoMap().then(() => {
-                            console.log('Map rendered successfully');
-                        }).catch(err => {
-                            console.error('Map error:', err);
-                            console.error('Error stack:', err.stack);
-                        });
+                        console.log('Geographic clicked - rendering map');
+                        renderGeoMap().catch(err => console.error('Map error:', err));
                     }
                 });
             });

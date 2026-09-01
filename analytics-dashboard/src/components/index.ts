@@ -1,0 +1,13 @@
+export { Sidebar } from './Sidebar';
+export { Header } from './Header';
+export { KpiCard } from './KpiCard';
+export { PerformanceChart } from './PerformanceChart';
+export { GradeDistributionChart } from './GradeDistributionChart';
+export { AttendanceGauge } from './AttendanceGauge';
+export { TopCoursesChart } from './TopCoursesChart';
+export { StudentsByYearChart } from './StudentsByYearChart';
+export { RevenueChart } from './RevenueChart';
+export { DataTable } from './DataTable';
+export { AlertsPanel } from './AlertsPanel';
+export { QuickActions } from './QuickActions';
+export { Footer } from './Footer';

@@ -1,0 +1,186 @@
+{
+ "generated_at": "2026-07-23T21:30:00.000Z",
+ "date_from": "2026-06-15",
+ "date_through": "2026-07-21",
+ "note": "Meta creative/audience insights — hand-pulled via the Meta Ads MCP (not yet part of the automated BigQuery warehouse). Image/video thumbnail URLs are Meta-signed and expire after a period; re-run the pull to refresh them.",
+ "kpis": {
+  "reach": 155771,
+  "impressions": 271310,
+  "frequency": 1.741723,
+  "cpm": 63.82,
+  "ctr_pct": 1.68,
+  "cpc": 3.80,
+  "spend": 17314.09,
+  "post_engagement": 21492,
+  "video_p100_watched": 7769,
+  "vcr_pct": 2.86,
+  "link_clicks": 3648
+ },
+ "platform": [
+  { "platform": "instagram", "impressions": 183876, "spend": 9049.55 },
+  { "platform": "facebook", "impressions": 61131, "spend": 7614.29 },
+  { "platform": "audience_network", "impressions": 24185, "spend": 379.14 },
+  { "platform": "threads", "impressions": 1901, "spend": 243.44 },
+  { "platform": "unknown", "impressions": 215, "spend": 27.66 },
+  { "platform": "messenger", "impressions": 2, "spend": 0.01 }
+ ],
+ "age": [
+  { "age": "18-24", "impressions": 86 },
+  { "age": "25-34", "impressions": 119857 },
+  { "age": "35-44", "impressions": 59461 },
+  { "age": "45-54", "impressions": 43791 },
+  { "age": "55-64", "impressions": 29694 },
+  { "age": "65+", "impressions": 18265 },
+  { "age": "Unknown", "impressions": 156 }
+ ],
+ "gender": [
+  { "gender": "female", "impressions": 59162 },
+  { "gender": "male", "impressions": 79507 },
+  { "gender": "unknown", "impressions": 132641 }
+ ],
+ "states": [
+  { "state": "Florida", "impressions": 43721 },
+  { "state": "California", "impressions": 35637 },
+  { "state": "New York", "impressions": 32964 },
+  { "state": "Texas", "impressions": 9613 },
+  { "state": "Louisiana", "impressions": 8893 },
+  { "state": "New Jersey", "impressions": 8231 },
+  { "state": "Illinois", "impressions": 7629 },
+  { "state": "North Carolina", "impressions": 7014 },
+  { "state": "Arizona", "impressions": 5955 },
+  { "state": "Pennsylvania", "impressions": 5637 },
+  { "state": "Virginia", "impressions": 5589 },
+  { "state": "Ohio", "impressions": 4893 },
+  { "state": "Michigan", "impressions": 4512 },
+  { "state": "Tennessee", "impressions": 4307 },
+  { "state": "Nevada", "impressions": 4006 }
+ ],
+ "peak_hours": [
+  { "hour": 0, "impressions": 10771, "post_engagement": 424 },
+  { "hour": 1, "impressions": 2869, "post_engagement": 276 },
+  { "hour": 2, "impressions": 8584, "post_engagement": 224 },
+  { "hour": 3, "impressions": 5546, "post_engagement": 413 },
+  { "hour": 4, "impressions": 8871, "post_engagement": 847 },
+  { "hour": 5, "impressions": 9784, "post_engagement": 971 },
+  { "hour": 6, "impressions": 13586, "post_engagement": 952 },
+  { "hour": 7, "impressions": 17482, "post_engagement": 1726 },
+  { "hour": 8, "impressions": 23306, "post_engagement": 1017 },
+  { "hour": 9, "impressions": 15223, "post_engagement": 1039 },
+  { "hour": 10, "impressions": 13455, "post_engagement": 1417 },
+  { "hour": 11, "impressions": 12437, "post_engagement": 1102 },
+  { "hour": 12, "impressions": 13982, "post_engagement": 1091 },
+  { "hour": 13, "impressions": 11966, "post_engagement": 1110 },
+  { "hour": 14, "impressions": 11831, "post_engagement": 997 },
+  { "hour": 15, "impressions": 11316, "post_engagement": 1117 },
+  { "hour": 16, "impressions": 10254, "post_engagement": 1140 },
+  { "hour": 17, "impressions": 10071, "post_engagement": 905 },
+  { "hour": 18, "impressions": 9004, "post_engagement": 964 },
+  { "hour": 19, "impressions": 20243, "post_engagement": 1169 },
+  { "hour": 20, "impressions": 8824, "post_engagement": 1031 },
+  { "hour": 21, "impressions": 10460, "post_engagement": 676 },
+  { "hour": 22, "impressions": 7192, "post_engagement": 581 },
+  { "hour": 23, "impressions": 4253, "post_engagement": 303 }
+ ],
+ "campaigns": [
+  {
+   "id": "120248304846100411", "name": "Aashish Maru | Medspa UGC Reels",
+   "reach": 14929, "impressions": 39403, "frequency": 2.63936, "cpm": 150.82,
+   "post_engagement": 13707, "video_p100_watched": 5228, "link_clicks": 593, "spend": 5942.66,
+   "thumbnail": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/732164751_1680227523097607_1766301923123123563_n.jpg?stp=dst-jpg_s160x160_tt6&_nc_cat=104&ccb=1-7&_nc_sid=4c1fc5&_nc_ohc=MAALC-m1OR0Q7kNvwF2ix5Z&_nc_oc=AdpM8MmrOPE79mgDFIqY7ML-QrYcJbbbjd8zH50YVBqQo1jivQEL2fF7AwiNd0xhbZs&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AEZPnVgEAAAA&_nc_gid=HLGN7vEgSyM9ElvurRmBhA&_nc_tpa=Q5bMBQGAy2no3rdZ3nJ09LpvPjVd8kN9LLbv8dMr6fcKjPYQxsR4D1uRtkqStDBa61oQt7MXCrc69xFn&oh=00_AQCKA44h5TBp1jKyuNIiCzYh9YzWHvQqwQ0Jt9TcmTAQmQ&oe=6A6808AC",
+   "thumbnail_type": "video"
+  },
+  {
+   "id": "120248881907540411", "name": "RELAUNCH | Med Spa + Dental | ABO | Broad",
+   "reach": 122594, "impressions": 164256, "frequency": 1.339837, "cpm": 30.20,
+   "post_engagement": 1419, "video_p100_watched": null, "link_clicks": 1037, "spend": 4961.02,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQI-1nua_ipe8aXnLieUct3f1M0o3lOVGBxwrQmTUDTG6GMGGQ-YttjETADZ_EfArySX8_JOaY0vb3e_T5gaQMhEg5IrHZF_kIMTHSDk0CL5eJTngV2xUMW53dB_D5NJaO0odd4x7rs_VtPInz-fSbKu",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120248175398410411", "name": "AI Funding Solutions | Med Spa + Dental | ABO | Broad",
+   "reach": 13858, "impressions": 29479, "frequency": 2.127219, "cpm": 141.86,
+   "post_engagement": 2631, "video_p100_watched": 771, "link_clicks": 634, "spend": 4181.81,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQL0wdyFvH2ZjAae5ngI8a3xcshM-4ZLFrbw4xBeGlACymxmm7hpgFRSHyouPXFThMaFPa_mBL8GA-XdENEii212NZo7_Hs23MDpKqOIXB6q8TEcPrJAwtkFMsYE7x30OWOpLgit1SGZrVexMcw-MvOk",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120248020479770411", "name": "RPF 01 - Dentists - WV - Images",
+   "reach": 12069, "impressions": 22593, "frequency": 1.871986, "cpm": 63.43,
+   "post_engagement": 1075, "video_p100_watched": 5, "link_clicks": 952, "spend": 1433.02,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQIacZEXNxDgOxOQiKgA8-Smj4qGxDVIV6KWoTE01vwaf4UGSUuVd7Ydrk54ZGhtF79Epub89KK4v2D8Mk58xnU4QhpXaqs8CTYMiDVK8tVoWSJ72aRkWfim0r1b_AX3sHc3u_LqHKjqxIL0sh2K6tsH",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120248175348750411", "name": "[AI Funding] RPF 01 - Derma - WV - Images",
+   "reach": 4903, "impressions": 7166, "frequency": 1.461554, "cpm": 65.95,
+   "post_engagement": 295, "video_p100_watched": null, "link_clicks": 271, "spend": 472.61,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQJpHWrUAVgB5b_Nhjy_H5T4cAbv7ba1Ed7zLZE7ycZxTBEN50BvaF-jS38EQ7cM7reJ_VWsUyfacmcXp0Bcp_jtxxCt_Azu6PUOZjURxBjF92MwHEMU5rqiWZeWFzLcbTOZXVqiHdZ5HDwj6QzHtZJz",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120247947363680411", "name": "Warm Up",
+   "reach": 1833, "impressions": 2706, "frequency": 1.476268, "cpm": 45.24,
+   "post_engagement": 2234, "video_p100_watched": 1736, "link_clicks": 131, "spend": 122.42,
+   "thumbnail": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/727884419_3179585292234398_3956494098719864497_n.jpg?stp=dst-jpg_s75x225_tt6&_nc_cat=105&ccb=1-7&_nc_sid=4c1fc5&_nc_ohc=05iNOweRJHgQ7kNvwEW7621&_nc_oc=AdqIJnkx9k6fedd0LbDay0UK4eR3WFwhhzYK3pwG-r8DicsBC9HhDuZEgasRnudr7Iw&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AEZPnVgEAAAA&_nc_gid=HLGN7vEgSyM9ElvurRmBhA&_nc_tpa=Q5bMBQGH_NnwuzdhR6FkKoZ5G0WOI7xdTLD3QpjhzIwiK21GiTQ82DZ39rgABrqIQkJab7ym7-UFcaH5&oh=00_AQBujH4ttH831lTz7bUZL1BvjzDEjeinbrqyU8BbmZI6Yg&oe=6A68070C",
+   "thumbnail_type": "video"
+  },
+  {
+   "id": "120246685751060411", "name": "V3 | AI Funding Solutions: Med Spa",
+   "reach": 889, "impressions": 1156, "frequency": 1.300337, "cpm": 103.70,
+   "post_engagement": 17, "video_p100_watched": null, "link_clicks": 13, "spend": 119.88,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQLErlWaXbzC1JGW49yZxGHtjHow7av9SGhqHrEJCN5WJ0sUUnyQmFyVE0go_ZvlzXYzZM00Abqewg1Tl_Q54Wi4FdX8Zh6WlvJ1wGDqeJJO9e93mpvdlgAk2bFWNVFd8WvdnELLXG04_Buc6Kl-SbEY",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120248890453000411", "name": "MOF - Aashish Maru - Medspa UGC Reels – Copy",
+   "reach": 176, "impressions": 227, "frequency": 1.289773, "cpm": 309.43,
+   "post_engagement": 71, "video_p100_watched": 22, "link_clicks": 3, "spend": 70.24,
+   "thumbnail": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/731441880_1232980479888984_2151750824704845603_n.jpg?stp=dst-jpg_s160x160_tt6&_nc_cat=110&ccb=1-7&_nc_sid=4c1fc5&_nc_ohc=aiDo-SOktn8Q7kNvwFS9mHS&_nc_oc=Adohaz5Lt88-0o_T_IkO9WBH-d55yqCmWufDO5rn0fjHycdDa1xKmgGi-corPhzF6P8&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AEZPnVgEAAAA&_nc_gid=HLGN7vEgSyM9ElvurRmBhA&_nc_tpa=Q5bMBQE5uSpCiFXoyJy5e4Z_-2lOhKUhM5WBUMM0TiQ_f9QGI2wfScu4Yb1QfD4PHyTIzzfVVE77MB8B&oh=00_AQAQ4BlYlZrb89BkowloikxW9-aIhccP0mJ7kxxNgY7h6Q&oe=6A680819",
+   "thumbnail_type": "video"
+  },
+  {
+   "id": "120248453390130411", "name": "(Pixel Updated) AI Funding Solutions | Med Spa | ABO | Broad",
+   "reach": 271, "impressions": 691, "frequency": 2.549816, "cpm": 11.37,
+   "post_engagement": 21, "video_p100_watched": 1, "link_clicks": 4, "spend": 7.86,
+   "thumbnail": "https://www.facebook.com/ads/image/?d=AQL0wdyFvH2ZjAae5ngI8a3xcshM-4ZLFrbw4xBeGlACymxmm7hpgFRSHyouPXFThMaFPa_mBL8GA-XdENEii212NZo7_Hs23MDpKqOIXB6q8TEcPrJAwtkFMsYE7x30OWOpLgit1SGZrVexMcw-MvOk",
+   "thumbnail_type": "image"
+  },
+  {
+   "id": "120248453007920411", "name": "(Pixel Updated) AI Funding Solutions | Medspa UGC Reels",
+   "reach": 861, "impressions": 3633, "frequency": 4.219512, "cpm": 0.71,
+   "post_engagement": 22, "video_p100_watched": 6, "link_clicks": 10, "spend": 2.57,
+   "thumbnail": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/732151955_2577226336036372_2546557970976545822_n.jpg?stp=dst-jpg_s160x160_tt6&_nc_cat=100&ccb=1-7&_nc_sid=4c1fc5&_nc_ohc=2cVxzklJHHcQ7kNvwFUPO-J&_nc_oc=AdpeUc6Sxj0Xy5OVA2LyWyCan1ghn09eaHGrn11s_Ec9uvgH2_xRNkutDij0BWxjNy4&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AEZPnVgEAAAA&_nc_gid=HLGN7vEgSyM9ElvurRmBhA&_nc_tpa=Q5bMBQGkd7j9u291soUKVtg9TmzjcgbhewZaWEczsjHz7vRBu4TXL5YqWyr6FNCVlyv6Ua8Qc4TpahtD&oh=00_AQDv__iTFrSM6xTsoqqKQmTJvtPgeK-JpeOMiVGX68aWBg&oe=6A67FA55",
+   "thumbnail_type": "video"
+  },
+  {
+   "id": "120249227174650411", "name": "AIFS Marketing Agency Cold B1",
+   "reach": null, "impressions": null, "frequency": null, "cpm": null,
+   "post_engagement": null, "video_p100_watched": null, "link_clicks": null, "spend": null,
+   "thumbnail": null, "thumbnail_type": null
+  },
+  {
+   "id": "120249184490100411", "name": "HVAC | AI Funding Solutions | U.S. HVAC BUSINESS OWNERS | ABO | Broad",
+   "reach": null, "impressions": null, "frequency": null, "cpm": null,
+   "post_engagement": null, "video_p100_watched": null, "link_clicks": null, "spend": null,
+   "thumbnail": null, "thumbnail_type": null
+  },
+  {
+   "id": "120246201060680411", "name": "V2 | AI Funding Solutions: Med Spa Dynamic",
+   "reach": null, "impressions": null, "frequency": null, "cpm": null,
+   "post_engagement": null, "video_p100_watched": null, "link_clicks": null, "spend": null,
+   "thumbnail": null, "thumbnail_type": null
+  },
+  {
+   "id": "120246127614140411", "name": "AI Funding Solutions: Med Spa Dynamic - [Leads]",
+   "reach": null, "impressions": null, "frequency": null, "cpm": null,
+   "post_engagement": null, "video_p100_watched": null, "link_clicks": null, "spend": null,
+   "thumbnail": null, "thumbnail_type": null
+  },
+  {
+   "id": "120246014332730411", "name": "AI Funding Solutions: Med Spa Dynamic",
+   "reach": null, "impressions": null, "frequency": null, "cpm": null,
+   "post_engagement": null, "video_p100_watched": null, "link_clicks": null, "spend": null,
+   "thumbnail": null, "thumbnail_type": null
+  }
+ ]
+}

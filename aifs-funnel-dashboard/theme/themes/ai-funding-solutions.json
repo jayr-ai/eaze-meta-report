@@ -1,0 +1,66 @@
+{
+  "businessName": "AI Funding Solutions",
+  "brandInput": "#7B5CE0",
+  "generatedBy": "theme/build-theme.mjs",
+  "status": {
+    "good": "#0ca30c",
+    "warning": "#fab219",
+    "critical": "#d03b3b"
+  },
+  "heroRampDark": [
+    "#886af0",
+    "#6c4acd",
+    "#5229ab",
+    "#390384",
+    "#1e004e"
+  ],
+  "heroRampLight": [
+    "#d6d2fd",
+    "#b1a5fc",
+    "#9074fa",
+    "#704fd2",
+    "#5229ab"
+  ],
+  "dark": {
+    "series1": "#7b5ce0",
+    "series2": "#947507",
+    "page": "#020207",
+    "surface1": "#0f0d1b",
+    "textPrimary": "#ffffff",
+    "textSecondary": "#c9c6e0",
+    "textMuted": "#8f8ba8",
+    "grid": "#242232",
+    "baseline": "#373549",
+    "border": "rgba(255,255,255,0.10)",
+    "cardBorderGlow": "#473e74",
+    "check": {
+      "ok": true,
+      "report": [
+        "CVD ΔE 118.1 (pass)",
+        "#7b5ce0 contrast vs surface 4.07:1",
+        "#947507 contrast vs surface 4.39:1"
+      ]
+    }
+  },
+  "light": {
+    "series1": "#7b5ce0",
+    "series2": "#a77600",
+    "page": "#f6f6fb",
+    "surface1": "#fcfbfe",
+    "textPrimary": "#0b0b0b",
+    "textSecondary": "#52514e",
+    "textMuted": "#898781",
+    "grid": "#e1e0d9",
+    "baseline": "#c3c2b7",
+    "border": "rgba(11,11,11,0.10)",
+    "cardBorderGlow": "#7f75b8",
+    "check": {
+      "ok": true,
+      "report": [
+        "CVD ΔE 120.8 (pass)",
+        "#7b5ce0 contrast vs surface 4.60:1",
+        "#a77600 contrast vs surface 3.91:1"
+      ]
+    }
+  }
+}

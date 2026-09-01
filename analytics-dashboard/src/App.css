@@ -1,0 +1,54 @@
+/* Dashboard specific styles */
+
+/* Sidebar responsive */
+@media (max-width: 1024px) {
+  aside {
+    width: 80px !important;
+  }
+
+  main {
+    margin-left: 80px !important;
+  }
+
+  aside .logo h1,
+  aside nav button span {
+    display: none;
+  }
+
+  aside nav button {
+    justify-content: center;
+  }
+
+  .quote-card {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  aside {
+    position: fixed;
+    left: -240px;
+    z-index: 50;
+    transition: left 0.3s;
+  }
+
+  main {
+    margin-left: 0 !important;
+  }
+
+  .sidebar-open aside {
+    left: 0;
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .col-span-2 {
+    grid-column: span 1;
+  }
+}

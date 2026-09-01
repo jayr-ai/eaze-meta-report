@@ -1,0 +1,10 @@
+{
+  "name": "aifs-funnel-dashboard",
+  "version": "1.0.0",
+  "description": "AI Funding Solutions marketing-to-cash funnel dashboard (BigQuery-fed, nightly-baked)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "bake": "node bake.js"
+  }
+}

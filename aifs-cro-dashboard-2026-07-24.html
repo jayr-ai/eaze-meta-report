@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AIFS CRO Dashboard - Jul 24, 2026</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#12161f; --panel2:#161b26; --border:#232a38;
+    --text:#e6e9ef; --muted:#8b95a7; --accent:#4f8cff; --good:#2fbf71;
+    --warn:#e8a13a; --bad:#e05656; --tealbad:#e05656;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f5f6f8; --panel:#ffffff; --panel2:#f0f2f6; --border:#e0e3ea;
+      --text:#1b2130; --muted:#5b6472; --accent:#2f5fd6; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+  header.top{border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:28px}
+  header.top h1{margin:0 0 6px;font-size:1.7rem}
+  header.top .sub{color:var(--muted);font-size:.92rem}
+  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:600;margin-right:6px}
+  .badge.win{background:rgba(47,191,113,.15);color:var(--good)}
+  .badge.gap{background:rgba(224,86,86,.15);color:var(--bad)}
+  .badge.window{background:rgba(79,140,255,.15);color:var(--accent)}
+  section{margin-bottom:38px}
+  h2{font-size:1.2rem;border-left:4px solid var(--accent);padding-left:10px;margin-bottom:14px}
+  h2 .num{color:var(--muted);font-weight:400;margin-right:6px}
+  h3{font-size:.95rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin:20px 0 8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .tile{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .tile .lbl{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.02em}
+  .tile .val{font-size:1.4rem;font-weight:700;margin-top:4px}
+  .tile .sub{font-size:.75rem;color:var(--muted);margin-top:2px}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:.88rem}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{background:var(--panel2);color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .callout{background:var(--panel2);border:1px solid var(--border);border-left:4px solid var(--warn);border-radius:8px;padding:14px 16px;margin:14px 0;font-size:.9rem}
+  .callout.bad{border-left-color:var(--bad)}
+  .callout.good{border-left-color:var(--good)}
+  .callout strong{color:var(--text)}
+  .flag{color:var(--bad);font-weight:600}
+  .ok{color:var(--good);font-weight:600}
+  ul.gaps li, ol.ice li{margin-bottom:10px}
+  code{background:var(--panel2);padding:1px 6px;border-radius:4px;font-size:.85em}
+  footer{border-top:1px solid var(--border);padding-top:16px;color:var(--muted);font-size:.8rem;margin-top:40px}
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>AI Funding Solutions - CRO Diagnostic Report</h1>
+  <div class="pill-row">
+    <span class="badge window">Week-to-date window: Sun Jul 19 - Fri Jul 24, 2026</span>
+    <span class="badge window">Program-to-date: since launch Jun 15, 2026</span>
+  </div>
+  <div class="sub">
+    Meta act_797173066166825 · GHL location 61bBcrk5Fi4BuTWwvW0P, pipeline <code>PJbkfqE3g4KRP8i9ZeLb</code> ("AI FUNDING SOLUTIONS") only ·
+    Stripe acct_1TikBsANb4ghm41m · Data pulled live Fri Jul 24, 2026 ~6:12 AM PDT
+  </div>
+</header>
+
+<section>
+<h2><span class="num">01</span>CRO Scoreboard</h2>
+<h3>This week (Jul 19 - 24)</h3>
+<div class="grid">
+  <div class="tile"><div class="lbl">Meta Spend</div><div class="val">$1,662.52</div></div>
+  <div class="tile"><div class="lbl">Impressions</div><div class="val">59,863</div></div>
+  <div class="tile"><div class="lbl">Clicks</div><div class="val">457</div><div class="sub">CTR 0.76% · CPC $3.64</div></div>
+  <div class="tile"><div class="lbl">Landing Page Views</div><div class="val">259</div></div>
+  <div class="tile"><div class="lbl">Meta-tracked Leads</div><div class="val">19</div></div>
+  <div class="tile"><div class="lbl">GHL New Opportunities</div><div class="val">16</div><div class="sub">created this week, this pipeline only</div></div>
+  <div class="tile"><div class="lbl">Real Demos Booked</div><div class="val">23</div><div class="sub">calendar-verified, excl. 4 internal test bookings</div></div>
+  <div class="tile"><div class="lbl">Show Rate</div><div class="val flag">Not computable</div><div class="sub">see Booking Distribution gap below</div></div>
+</div>
+
+<h3>Program-to-date (since Jun 15 launch)</h3>
+<div class="grid">
+  <div class="tile"><div class="lbl">Meta Spend</div><div class="val">$17,314.09</div></div>
+  <div class="tile"><div class="lbl">Impressions</div><div class="val">271,310</div></div>
+  <div class="tile"><div class="lbl">Clicks</div><div class="val">4,551</div><div class="sub">CTR 1.68% · CPC $3.80</div></div>
+  <div class="tile"><div class="lbl">Meta-tracked Leads</div><div class="val">314</div></div>
+  <div class="tile"><div class="lbl">Pipeline Opportunities</div><div class="val">299</div><div class="sub">total in AI FUNDING SOLUTIONS pipeline right now</div></div>
+  <div class="tile"><div class="lbl">GHL Closed-Won Face Value</div><div class="val">$24,979</div><div class="sub">7 opportunities - see Gate below</div></div>
+  <div class="tile"><div class="lbl">Stripe-Verified Real Revenue</div><div class="val ok">$10,982</div><div class="sub">6 succeeded, livemode charges</div></div>
+  <div class="tile"><div class="lbl">Meta Opportunity Score</div><div class="val">100/100</div><div class="sub">no open recommendations from Meta</div></div>
+</div>
+</section>
+
+<section>
+<h2><span class="num">02</span>Unit Economics</h2>
+<table>
+<tr><th>Metric</th><th class="num">Value</th><th>Basis</th></tr>
+<tr><td>Cost per real demo booked (this week)</td><td class="num">$72.28</td><td>$1,662.52 ÷ 23 calendar-verified real demos</td></tr>
+<tr><td>Cost per "Call Booked"-stage opportunity (current snapshot)</td><td class="num">$524.67</td><td>$17,314.09 ÷ 33 opportunities currently sitting in the Call Booked stage - a stock, not a flow; don't read this as a weekly CPA</td></tr>
+<tr><td>GHL-nominal CPA (flat stage count, misleading)</td><td class="num flag">$2,473.44</td><td>$17,314.09 ÷ 7 Closed-Won opportunities - treats 2 unpaid records as real sales</td></tr>
+<tr><td>Real CPA (Stripe-verified)</td><td class="num ok">$2,885.68</td><td>$17,314.09 ÷ 6 Stripe-verified real sales</td></tr>
+<tr><td>ROAS (Stripe-verified, program-to-date)</td><td class="num flag">0.63x</td><td>$10,982 real revenue ÷ $17,314.09 spend - currently loss-making on a pure cash-in-window basis</td></tr>
+<tr><td>Meta Opportunity Score</td><td class="num">100/100</td><td>no live recommendations returned</td></tr>
+</table>
+<div class="callout">
+Both CPA readings are shown deliberately: the GHL flat count silently treats 2 unpaid "Closed-Won" records as sales, inflating the denominator and understating real cost per sale by ~14%. Always quote the Stripe-verified figure as the real number.
+</div>
+</section>
+
+<section>
+<h2><span class="num">03</span>Marketing Performance by Campaign (this week)</h2>
+<table>
+<tr><th>Campaign</th><th class="num">Spend</th><th class="num">Impr.</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">CPC</th><th>Cost / Result</th></tr>
+<tr><td>RELAUNCH | Med Spa + Dental | ABO | Broad <span class="flag">†</span></td><td class="num">$902.65</td><td class="num">54,663</td><td class="num">318</td><td class="num">0.58%</td><td class="num">$2.84</td><td>$180.53 / website appt scheduled</td></tr>
+<tr><td>Aashish Maru - Medspa UGC Reels, CBO</td><td class="num">$642.75</td><td class="num">3,158</td><td class="num">56</td><td class="num">1.77%</td><td class="num">$11.48</td><td>$49.44 / website appt scheduled</td></tr>
+<tr><td>RPF 01 - Dentists, WV Images</td><td class="num">$117.12</td><td class="num">2,042</td><td class="num">83</td><td class="num">4.06%</td><td class="num">$1.41</td><td>$11.71 / website lead</td></tr>
+<tr><td><strong>Total (reconciles to account total)</strong></td><td class="num"><strong>$1,662.52</strong></td><td colspan="5"></td></tr>
+</table>
+<div class="callout bad">
+<span class="flag">†</span> This campaign's Meta ID (<code>120248881907540411</code>) is a fresh "RELAUNCH" duplicate - <strong>not</strong> the canonical Med Spa + Dental campaign ID documented in the dashboard's build notes (<code>120248175398410411</code>, which spent $0 this week). Meta has spun up another copy; it needs to be folded into the canonical campaign map before it fragments future reporting. All other canonical campaigns (Warm Up, V3 Med Spa, RPF Derma) had zero spend this week.
+</div>
+</section>
+
+<section>
+<h2><span class="num">04</span>Sales Pipeline - Current Stage Snapshot (n=299)</h2>
+<table>
+<tr><th>Stage</th><th class="num">Count</th><th class="num">Face Value</th></tr>
+<tr><td>New - Unworked</td><td class="num">0</td><td class="num">$0</td></tr>
+<tr><td>Contacted</td><td class="num">10</td><td class="num">$49,970</td></tr>
+<tr><td>Contacted - No Answer</td><td class="num">79</td><td class="num">$394,763</td></tr>
+<tr><td>Call Booked</td><td class="num">33</td><td class="num">$184,904</td></tr>
+<tr><td>Rescheduling</td><td class="num">7</td><td class="num">$39,979</td></tr>
+<tr><td>No Show</td><td class="num">61</td><td class="num">$384,817</td></tr>
+<tr><td>Appt Cancelled</td><td class="num">10</td><td class="num">$44,973</td></tr>
+<tr><td>Call Held - WIP</td><td class="num">8</td><td class="num">$59,976</td></tr>
+<tr><td>High Priority</td><td class="num">22</td><td class="num">$154,934</td></tr>
+<tr><td>Closed - Won</td><td class="num">7</td><td class="num">$24,979</td></tr>
+<tr><td>Long-Term Nurture</td><td class="num">22</td><td class="num">$119,937</td></tr>
+<tr><td>Lost</td><td class="num">40</td><td class="num">$204,886</td></tr>
+</table>
+<div class="callout">
+This week, 2 opportunities moved into Closed - Won: <strong>Arpan Patel</strong> ($1,997, Jul 23) and <strong>Juan Valencia</strong> ($9,997 face value, Jul 21). Only Arpan's is Stripe-verified - see Section 05.
+</div>
+</section>
+
+<section>
+<h2><span class="num">05</span>Revenue Reconciliation - Stripe-Verified, Not GHL Face Value</h2>
+<div class="pill-row">
+  <span class="badge gap">GHL pipeline face value: $24,979</span>
+  <span class="badge win">Stripe-verified real revenue: $10,982</span>
+</div>
+<table>
+<tr><th>GHL Closed-Won Opportunity</th><th class="num">Face Value</th><th>Stripe Match</th><th>Status</th></tr>
+<tr><td>Haresh Emandi</td><td class="num">$4,997</td><td>ch_…lEbE, $4,997, matched within 7s</td><td class="ok">Verified</td></tr>
+<tr><td>Claudia Lopez - Deposit</td><td class="num">$997</td><td>ch_3TstCHAN, $997, matched within 7s</td><td class="ok">Verified</td></tr>
+<tr><td>Rodion Pinkhasov - Deposit</td><td class="num">$997</td><td>ch_3TstNbAN, $997, matched within 6s</td><td class="ok">Verified</td></tr>
+<tr><td>Cheryln Gibbs - Deposit</td><td class="num">$997</td><td>ch_3TtuPHAN, $997, matched within 8s</td><td class="ok">Verified</td></tr>
+<tr><td>Arpan Patel - Deposit</td><td class="num">$1,997</td><td>ch_3TwAQ1AN, $1,997, matched within 7s</td><td class="ok">Verified</td></tr>
+<tr><td>Juan Valencia</td><td class="num">$9,997</td><td> - none found - </td><td class="flag">No payment on file</td></tr>
+<tr><td>Natalie Hadden - Deposit</td><td class="num">$4,997</td><td> - none found - </td><td class="flag">No payment on file</td></tr>
+</table>
+
+<h3>Unreconciled real Stripe charge</h3>
+<div class="callout bad">
+A <strong>real, succeeded, livemode $997 charge</strong> (ch_3TtbCaAN, Jul 15 2026 22:22:53 PT) doesn't match any Closed-Won opportunity within the ~10-second correlation window used above (nearest candidate, Natalie Hadden, is 10m 42s away and a different face value). This is either a payment for a customer whose GHL stage was never updated, or a sale entirely disconnected from this pipeline. <strong>Flagging for JV rather than guessing.</strong>
+</div>
+
+<h3>Excluded as test charges</h3>
+<table>
+<tr><th>Charge</th><th class="num">Amount</th><th>Reason excluded</th></tr>
+<tr><td>ch_3TrVmQAN</td><td class="num">$0.50</td><td>Refunded, Philippines-billed card - card verification test</td></tr>
+<tr><td>ch_3TlgQjAN</td><td class="num">$0.50</td><td>Philippines-billed card - card verification test</td></tr>
+<tr><td>py_3TlgMAAN</td><td class="num">$0.50</td><td>AU-billed Link wallet - card verification test</td></tr>
+</table>
+
+<div class="callout bad">
+<strong>Gap explanation:</strong> $24,979 (GHL) − $10,982 (Stripe) = $13,997. This is <em>not</em> one clean number - it decomposes into $14,994 of GHL "Closed-Won" face value with <strong>zero</strong> matching Stripe payment (Juan Valencia + Natalie Hadden), offset by one real $997 payment that has no GHL Closed-Won match at all. Net: GHL currently overstates real program-to-date cash by roughly 3x if its own Closed-Won stage is taken at face value.
+</div>
+</section>
+
+<section>
+<h2><span class="num">06</span>Booking Distribution (this week)</h2>
+<table>
+<tr><th>Calendar</th><th class="num">Real Bookings</th><th class="num">Showed</th><th class="num">No-Show</th><th class="num">Cancelled</th><th class="num">No Disposition Yet</th></tr>
+<tr><td>AI Funding Solutions Demo Call</td><td class="num">15</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">11</td></tr>
+<tr><td>AI Funding Solutions Demo Call - Medical</td><td class="num">7</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">6</td></tr>
+<tr><td>EAZE AI Funding Solutions Demo Call - General</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+<tr><td>HVAC / Referrals / Funding Discovery Call</td><td class="num">0</td><td colspan="4">no bookings this week</td></tr>
+<tr><td><strong>Total</strong></td><td class="num"><strong>23</strong></td><td class="num"><strong>3</strong></td><td class="num"><strong>1</strong></td><td class="num"><strong>1</strong></td><td class="num"><strong>18</strong></td></tr>
+</table>
+<div class="callout bad">
+<strong>Show rate is not computable as a clean weekly figure.</strong> Of 23 real demo bookings this week, only 5 carry a terminal outcome (showed/no-show/cancelled); <strong>17 are already past their scheduled call time and still show "confirmed"</strong> with no disposition logged (1 more, Diana Konecny, is genuinely later today). Among the 5 with a real outcome: 3 showed, 1 no-show, 1 cancelled → 75%, but that sample is only 22% of the week's real bookings and shouldn't be reported as "the" show rate. This is the same category of measurement gap the original report identified - it has not closed.
+</div>
+<div class="callout">
+Excluded from the counts above: 4 internal test bookings on the Medical calendar this week, all under Jayvee Respeto's own name/contact (3 as "Jayvee Respeto", 1 as "Jayvee Reyes"), all cancelled.
+</div>
+</section>
+
+<section>
+<h2><span class="num">07</span>Attribution - Click-to-Cash Chain</h2>
+<div class="callout bad">
+For all 7 Closed-Won opportunities (Stripe-verified and not), the GHL contact/opportunity record carries only a coarse <code>source: "Medical"</code> field and free-text tags (<code>lead from ad</code>, <code>call booked from ttmd</code>, <code>call booked from ash</code>). <strong>No populated <code>attributionSource</code> / <code>lastAttributionSource</code> fields (UTM, fbclid, referrer) exist at the opportunity level for any of them</strong> - re-verified fresh on this run via the same <code>search-opportunity</code> pull used for Section 04/05. The click-to-cash chain dead-ends at "this was a Medical-funnel ad lead" - it does not roll up onto the revenue record at the individual campaign or ad level. This is the report's core standing measurement gap and it is still open today.
+</div>
+</section>
+
+<section>
+<h2><span class="num">08</span>Critical Measurement Gaps (this run)</h2>
+<ul class="gaps">
+<li><strong>Booking disposition gap.</strong> 17 of 23 real demo bookings this week (74%) are past-due with no showed/no-show/cancelled status ever logged - show rate can't be trusted at a weekly cadence. <em>Newly quantified this run; not previously sized this precisely.</em></li>
+<li><strong>Revenue overstatement.</strong> 2 of 7 Closed-Won opportunities ($14,994, 60% of stated pipeline revenue) have zero matching Stripe payment. GHL's own stage is not proof of cash.</li>
+<li><strong>Unreconciled real payment.</strong> One real $997 charge (Jul 15) has no GHL Closed-Won match at all - a real sale that may be sitting mistracked somewhere else in the pipeline, or entirely outside it.</li>
+<li><strong>Attribution dead-end.</strong> UTM/click-level data never reaches the opportunity or revenue record - confirmed still true this run (Section 07).</li>
+<li><strong>Campaign ID drift.</strong> The week's top-spend campaign is a brand-new "RELAUNCH" duplicate not folded into the documented canonical campaign map.</li>
+<li><strong>Test-data noise.</strong> 4 of 27 total demo bookings this week (15%) were internal test bookings; nothing currently filters these out automatically.</li>
+</ul>
+</section>
+
+<section>
+<h2><span class="num">09</span>ICE-Ranked Experiments</h2>
+<ol class="ice">
+<li><strong>Enforce same-day disposition logging on every demo call.</strong> Impact: high (unlocks real show rate & cost-per-show for the first time). Confidence: high (root cause is a manual process gap, not a data pipeline issue). Ease: medium (needs closer/EA discipline or a status-update automation).</li>
+<li><strong>Resolve the 2 unpaid Closed-Won opportunities (Juan Valencia, Natalie Hadden).</strong> Impact: high ($14,994 of phantom revenue corrected). Confidence: high. Ease: high - collect the outstanding payment or move the stage back.</li>
+<li><strong>Trace the unmatched $997 Stripe charge (Jul 15) to its real customer.</strong> Impact: medium. Confidence: medium. Ease: high (single Stripe customer lookup + GHL search).</li>
+<li><strong>Fold the new "RELAUNCH" campaign ID into the canonical campaign map.</strong> Impact: medium (reporting integrity, prevents future fragmentation). Confidence: high. Ease: high.</li>
+<li><strong>Scope a UTM-to-opportunity attribution write-back</strong> (custom field populated at lead capture, carried through to Closed-Won). Impact: high (long-term marketing ROI clarity). Confidence: medium. Ease: low - real dev work.</li>
+</ol>
+</section>
+
+<section>
+<h2><span class="num">10</span>Remediation Priorities</h2>
+<table>
+<tr><th>Priority</th><th>Action</th><th>Closes Gap</th></tr>
+<tr><td>P1</td><td>Same-day booking disposition update process</td><td>#1 - show rate blind spot</td></tr>
+<tr><td>P2</td><td>Audit &amp; correct the 2 unpaid Closed-Won opportunities this week</td><td>#2 - revenue overstatement</td></tr>
+<tr><td>P3</td><td>Match the stray $997 Stripe charge to its real customer</td><td>#3 - unreconciled payment</td></tr>
+<tr><td>P4</td><td>Canonical-campaign remap for the new RELAUNCH ID</td><td>#5 - campaign ID drift</td></tr>
+<tr><td>P5</td><td>Scope UTM attribution write-back project</td><td>#4 - attribution dead-end (longer-term)</td></tr>
+</table>
+</section>
+
+<footer>
+Pulled live via Meta Marketing API, GoHighLevel, and Stripe MCP connectors - Fri Jul 24, 2026 ~6:12 AM PDT. Read-only across all three; no writes, activations, or deletions were performed.
+Every figure above traces to a specific tool call made during this run; nothing was estimated or carried over from a prior report.
+This is a standalone diagnostic report - it is separate from the automated <code>aifs-cro-dashboard-app</code> that redeploys twice daily to Railway. No deploy action was taken; review with JV before any of these numbers are pushed live.
+</footer>
+
+</div>
+</body>
+</html>

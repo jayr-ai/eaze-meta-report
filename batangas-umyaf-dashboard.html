@@ -6,6 +6,8 @@
     <title>Batangas UMYAF Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <style>
         :root {
             --primary-bg: #0f1419;
@@ -358,6 +360,128 @@
             flex-direction: column;
         }
 
+        /* Panel switching */
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Leaflet map customization */
+        #map {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            background-color: var(--secondary-bg);
+            margin-bottom: 20px;
+        }
+
+        .leaflet-container {
+            background-color: var(--secondary-bg) !important;
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background-color: var(--card-bg);
+            border-radius: 4px;
+        }
+
+        .leaflet-popup-content {
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .leaflet-popup-tip {
+            background-color: var(--card-bg);
+        }
+
+        .geo-map-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .geo-legend {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .geo-legend-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .geo-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .geo-legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 2px;
+            border: 1px solid var(--border-color);
+        }
+
+        .geo-unmatched-note {
+            background-color: rgba(255, 183, 77, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #ffe0b2;
+        }
+
+        .geo-top-cities {
+            margin-top: 24px;
+        }
+
+        .geo-top-cities-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .geo-city-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .geo-city-item:last-child {
+            border-bottom: none;
+        }
+
+        .geo-city-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .geo-city-count {
+            background-color: var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -437,19 +561,19 @@
                 <div class="logo-text">Batangas<br>UMYAF</div>
             </div>
             <nav style="display: flex; flex-direction: column; gap: 8px;">
-                <div class="nav-item active">
+                <div class="nav-item active" data-panel="overview">
                     <span class="nav-icon">📈</span>
                     <span>Overview</span>
                 </div>
-                <div class="nav-item">
-                    <span class="nav-icon">👥</span>
-                    <span>Demographics</span>
-                </div>
-                <div class="nav-item">
+                <div class="nav-item" data-panel="geographic">
                     <span class="nav-icon">🗺️</span>
                     <span>Geographic</span>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" data-panel="demographics">
+                    <span class="nav-icon">👥</span>
+                    <span>Demographics</span>
+                </div>
+                <div class="nav-item" data-panel="churches">
                     <span class="nav-icon">⛪</span>
                     <span>Churches</span>
                 </div>
@@ -481,69 +605,89 @@
             <div class="dashboard">
                 <div id="errorContainer"></div>
 
-                <!-- KPI Cards -->
-                <div class="kpi-row" id="kpiContainer">
-                    <div class="loading">Loading dashboard data...</div>
+                <!-- Overview Panel -->
+                <div id="overviewPanel" class="panel active">
+                    <!-- KPI Cards -->
+                    <div class="kpi-row" id="kpiContainer">
+                        <div class="loading">Loading dashboard data...</div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="charts-grid" id="chartsContainer" style="display: none;">
+                        <div class="chart-container">
+                            <div class="chart-title">📋 Status Breakdown</div>
+                            <div class="chart-wrapper">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">💍 Civil Status</div>
+                            <div class="chart-wrapper">
+                                <canvas id="civilChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">👫 Gender Distribution</div>
+                            <div class="chart-wrapper">
+                                <canvas id="genderChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">🤝 Involvement Status</div>
+                            <div class="chart-wrapper">
+                                <canvas id="involvementChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">🎂 Age Distribution</div>
+                            <div class="chart-wrapper">
+                                <canvas id="ageChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <div class="chart-title">⛪ Members per Local Church</div>
+                            <div class="chart-wrapper">
+                                <canvas id="churchChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Section -->
+                    <div class="bottom-section" id="bottomSection" style="display: none;">
+                        <div class="summary-panel">
+                            <div class="summary-title">📌 Executive Summary</div>
+                            <div id="summaryContent">
+                                <div class="loading">Loading...</div>
+                            </div>
+                        </div>
+
+                        <div class="map-container">
+                            <div class="map-title">🗺️ Geographic Distribution (Cities in Batangas)</div>
+                            <div class="map-bubble" id="mapBubbles">
+                                <div class="loading">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Charts Grid -->
-                <div class="charts-grid" id="chartsContainer" style="display: none;">
-                    <div class="chart-container">
-                        <div class="chart-title">📋 Status Breakdown</div>
-                        <div class="chart-wrapper">
-                            <canvas id="statusChart"></canvas>
+                <!-- Geographic Panel -->
+                <div id="geographicPanel" class="panel">
+                    <div class="geo-map-container">
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">🗺️ Geographic Heat Map - Batangas Municipalities</div>
+                        <div id="map"></div>
+                        <div id="geoLegend" class="geo-legend">
+                            <div class="geo-legend-title">Member Count by Municipality</div>
+                            <div id="legendContent"></div>
                         </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">💍 Civil Status</div>
-                        <div class="chart-wrapper">
-                            <canvas id="civilChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">👫 Gender Distribution</div>
-                        <div class="chart-wrapper">
-                            <canvas id="genderChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">🤝 Involvement Status</div>
-                        <div class="chart-wrapper">
-                            <canvas id="involvementChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">🎂 Age Distribution</div>
-                        <div class="chart-wrapper">
-                            <canvas id="ageChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <div class="chart-title">⛪ Members per Local Church</div>
-                        <div class="chart-wrapper">
-                            <canvas id="churchChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bottom Section -->
-                <div class="bottom-section" id="bottomSection" style="display: none;">
-                    <div class="summary-panel">
-                        <div class="summary-title">📌 Executive Summary</div>
-                        <div id="summaryContent">
-                            <div class="loading">Loading...</div>
-                        </div>
-                    </div>
-
-                    <div class="map-container">
-                        <div class="map-title">🗺️ Geographic Distribution (Cities in Batangas)</div>
-                        <div class="map-bubble" id="mapBubbles">
-                            <div class="loading">Loading...</div>
+                        <div id="unmatchedWarning" class="geo-unmatched-note" style="display: none;"></div>
+                        <div class="geo-top-cities">
+                            <div class="geo-top-cities-title">Top Cities by Members</div>
+                            <div id="topCitiesList"></div>
                         </div>
                     </div>
                 </div>
@@ -552,11 +696,167 @@
     </div>
 
     <script>
-        // Google Apps Script Web App endpoint
-        const APPS_SCRIPT_URL = 'https://script.googleapis.com/macros/s/AKfycbwZXHuu3B_OyEGGMS57_KOurq1s0moX7z3QnZ9LHMUg5m23ej5M6tlsT3-C-ioAhkUL/exec';
+        // Google Apps Script Web App endpoint with free CORS proxy (allorigins.win)
+        const APPS_SCRIPT_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://script.googleapis.com/macros/s/AKfycbwZXHuu3B_OyEGGMS57_KOurq1s0moX7z3QnZ9LHMUg5m23ej5M6tlsT3-C-ioAhkUL/exec');
+        const GEOJSON_URL = 'https://raw.githubusercontent.com/faeldon/philippines-json-maps/master/2023/geojson/provdists/lowres/municities-provdist-401000000.0.001.json';
 
         let allData = [];
         let chartInstances = {};
+        let mapInstance = null;
+        let geoJsonCache = null;
+
+        // Municipality mapping: GeoJSON property name -> canonical name
+        const municipalityMap = {
+            'City of Calaca': 'Calaca',
+            'City of Lipa': 'Lipa City',
+            'City of Sto. Tomas': 'Sto. Tomas',
+            'City of Tanauan': 'Tanauan',
+            'Mataasnakahoy': 'Mataas na Kahoy',
+            'Santa Teresita': 'Sta. Teresita'
+        };
+
+        // Canonical municipality names (34 total for Batangas)
+        const canonicalMunicipalities = [
+            'Agoncillo', 'Alitagtag', 'Balayan', 'Balete', 'Batangas City',
+            'Bauan', 'Calatagan', 'Calaca', 'Cuenca', 'Ibaan', 'Laurel',
+            'Lemery', 'Lian', 'Lipa City', 'Lobo', 'Mabini', 'Malvar',
+            'Mataas na Kahoy', 'Nasugbu', 'Padre Garcia', 'Rosario', 'San Jose',
+            'San Juan', 'San Luis', 'San Nicolas', 'San Pascual', 'Sta. Teresita',
+            'Taal', 'Talisay', 'Taysan', 'Tingloy', 'Tanauan', 'Tuy'
+        ];
+
+        // Alias mapping for flexible matching
+        const locationAliases = {
+            'Santo Tomas': 'Sto. Tomas',
+            'Sta Teresita': 'Sta. Teresita',
+            'Lipa': 'Lipa City',
+            'Tanauan City': 'Tanauan',
+            'Mataasnakahoy': 'Mataas na Kahoy'
+        };
+
+        /**
+         * Normalize GeoJSON municipality name to canonical form
+         */
+        function normalizeGeojsonName(geoJsonName) {
+            if (municipalityMap[geoJsonName]) {
+                return municipalityMap[geoJsonName];
+            }
+            return geoJsonName;
+        }
+
+        /**
+         * Match location string to a canonical municipality name
+         * Handles: substring matching with longest-match preference
+         * Special handling for "Batangas City" to avoid substring match on "Batangas"
+         */
+        function matchLocationToMunicipality(locationString) {
+            if (!locationString) return null;
+
+            const normalized = locationString.trim().toLowerCase();
+
+            // Special case: "Batangas City" must match "batangas city" or "city of batangas" specifically
+            // Check for exact city name first to avoid substring collision
+            const batangasCityMatches = ['batangas city', 'city of batangas'];
+            if (batangasCityMatches.some(m => normalized.includes(m))) {
+                return 'Batangas City';
+            }
+
+            let bestMatch = null;
+            let bestMatchLength = 0;
+
+            // Try to find the longest matching municipality
+            for (const city of canonicalMunicipalities) {
+                const cityLower = city.toLowerCase();
+                // Skip "Batangas City" if we already handled it above
+                if (city === 'Batangas City') continue;
+
+                if (normalized.includes(cityLower) && cityLower.length > bestMatchLength) {
+                    bestMatch = city;
+                    bestMatchLength = cityLower.length;
+                }
+            }
+
+            // If no direct match, try aliases
+            if (!bestMatch) {
+                for (const [alias, canonical] of Object.entries(locationAliases)) {
+                    if (normalized.includes(alias.toLowerCase())) {
+                        return canonical;
+                    }
+                }
+            }
+
+            return bestMatch;
+        }
+
+        /**
+         * Build city count map from data, matching each location to canonical municipality
+         */
+        function buildCityCountMap() {
+            const cityMap = {};
+            const unmatchedLocations = new Set();
+
+            // Initialize all canonical municipalities with 0
+            canonicalMunicipalities.forEach(city => {
+                cityMap[city] = 0;
+            });
+
+            // Match and count each row
+            allData.forEach(row => {
+                const locationStr = row['LOCATION / ADDRESS (City, Province)'];
+                const matchedCity = matchLocationToMunicipality(locationStr);
+
+                if (matchedCity) {
+                    cityMap[matchedCity]++;
+                } else {
+                    if (locationStr) {
+                        unmatchedLocations.add(locationStr);
+                    }
+                }
+            });
+
+            // Log unmatched locations to console
+            if (unmatchedLocations.size > 0) {
+                console.warn('Unmatched locations in Batangas municipal mapping:');
+                Array.from(unmatchedLocations).forEach(loc => {
+                    console.warn(`  - "${loc}"`);
+                });
+            }
+
+            return { cityMap, unmatchedLocations };
+        }
+
+        /**
+         * Interpolate color between min and max using linear or quantile scaling
+         */
+        function interpolateColor(value, min, max) {
+            if (value === 0) return '#1e293b'; // No data color
+            if (min === max) return '#3b82f6'; // Handle edge case
+
+            // Normalize to 0-1
+            const normalized = (value - min) / (max - min);
+
+            // Linear interpolation from dark (#1e3a8a) through medium (#3b82f6) to light (#93c5fd)
+            // Using a three-point gradient: dark (0%) -> medium (50%) -> light (100%)
+            if (normalized < 0.5) {
+                // Interpolate from #1e3a8a to #3b82f6
+                const t = normalized * 2; // 0 to 1
+                return interpolateBetween([0x1e, 0x3a, 0x8a], [0x3b, 0x82, 0xf6], t);
+            } else {
+                // Interpolate from #3b82f6 to #93c5fd
+                const t = (normalized - 0.5) * 2; // 0 to 1
+                return interpolateBetween([0x3b, 0x82, 0xf6], [0x93, 0xc5, 0xfd], t);
+            }
+        }
+
+        /**
+         * Interpolate between two RGB colors
+         */
+        function interpolateBetween(colorA, colorB, t) {
+            const r = Math.round(colorA[0] + (colorB[0] - colorA[0]) * t);
+            const g = Math.round(colorA[1] + (colorB[1] - colorA[1]) * t);
+            const b = Math.round(colorA[2] + (colorB[2] - colorA[2]) * t);
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+        }
 
         // Color palette (matching dataviz skill validated colors)
         const colorPalette = {
@@ -586,17 +886,17 @@
 
         async function loadData() {
             try {
+                console.log('loadData() called');
                 const errorContainer = document.getElementById('errorContainer');
                 errorContainer.innerHTML = '';
 
-                // Fetch data from Google Apps Script endpoint
-                const response = await fetch(APPS_SCRIPT_URL);
+                // Fetch CSV data
+                console.log('Fetching CSV from ./data/sheet-data.csv');
+                const response = await fetch('./data/sheet-data.csv');
                 if (!response.ok) throw new Error(`Failed to load data: ${response.statusText}`);
 
-                const result = await response.json();
-                if (!result.success) throw new Error(result.error || 'Unknown error');
-
-                allData = result.data;
+                const csvText = await response.text();
+                allData = parseCSV(csvText);
 
                 // Update last updated time
                 const now = new Date();
@@ -607,8 +907,11 @@
                 });
 
                 // Render dashboard
+                console.log('Rendering KPIs and charts...');
                 renderKPIs();
-                renderCharts();
+                console.log('About to call renderCharts()');
+                await renderCharts();
+                console.log('renderCharts() completed');
                 document.getElementById('chartsContainer').style.display = 'grid';
                 document.getElementById('bottomSection').style.display = 'grid';
 
@@ -618,10 +921,58 @@
                 errorContainer.innerHTML = `
                     <div class="error">
                         <strong>Error loading data:</strong> ${error.message}<br>
-                        <small>Make sure the Google Apps Script endpoint is deployed and accessible.</small>
+                        <small>Make sure ./data/sheet-data.csv exists.</small>
                     </div>
                 `;
             }
+        }
+
+        /**
+         * Parse CSV text into array of objects
+         */
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line.trim()) continue;
+
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    const nextChar = line[j + 1];
+
+                    if (char === '"') {
+                        if (inQuotes && nextChar === '"') {
+                            current += '"';
+                            j++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+
+                const row = {};
+                headers.forEach((header, idx) => {
+                    row[header] = values[idx] || '';
+                });
+                data.push(row);
+            }
+
+            return data;
         }
 
         function renderKPIs() {
@@ -711,7 +1062,7 @@
             };
         }
 
-        function renderCharts() {
+        async function renderCharts() {
             // Status Chart
             renderStatusChart();
             renderCivilChart();
@@ -721,6 +1072,7 @@
             renderChurchChart();
             renderSummary();
             renderMap();
+            await renderGeoMap(); // New geographic choropleth map
         }
 
         function renderStatusChart() {
@@ -1015,8 +1367,238 @@
                 .join('');
         }
 
+        /**
+         * Fetch and cache GeoJSON data for Batangas municipalities
+         */
+        async function fetchGeojsonData() {
+            if (geoJsonCache) {
+                return geoJsonCache;
+            }
+
+            try {
+                const response = await fetch(GEOJSON_URL);
+                if (!response.ok) throw new Error(`Failed to fetch GeoJSON: ${response.statusText}`);
+                geoJsonCache = await response.json();
+                return geoJsonCache;
+            } catch (error) {
+                console.error('Error fetching GeoJSON:', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Render geographic choropleth map
+         */
+        async function renderGeoMap() {
+            try {
+                console.log('renderGeoMap called, allData length:', allData.length);
+
+                // Build city count map from data
+                const { cityMap, unmatchedLocations } = buildCityCountMap();
+                console.log('cityMap built:', cityMap);
+
+                // Fetch and cache GeoJSON
+                const geoJsonData = await fetchGeojsonData();
+
+                // Calculate min/max for color interpolation (excluding 0)
+                const nonZeroCounts = Object.values(cityMap).filter(c => c > 0);
+                const minCount = nonZeroCounts.length > 0 ? Math.min(...nonZeroCounts) : 0;
+                const maxCount = Math.max(...Object.values(cityMap));
+
+                // Destroy existing map instance if it exists
+                if (mapInstance) {
+                    mapInstance.remove();
+                    mapInstance = null;
+                }
+
+                // Initialize map
+                mapInstance = L.map('map').setView([13.7563, 121.1785], 9); // Center of Batangas
+
+                // Style function for GeoJSON features
+                const style = (feature) => {
+                    const name = feature.properties.adm3_en;
+                    const canonicalName = normalizeGeojsonName(name);
+                    const count = cityMap[canonicalName] || 0;
+
+                    const color = interpolateColor(count, minCount, maxCount);
+
+                    return {
+                        fillColor: color,
+                        weight: 1,
+                        opacity: 1,
+                        color: '#334155',
+                        fillOpacity: 0.85
+                    };
+                };
+
+                // Event handlers for hover effects
+                let lastLayer = null;
+
+                const onEachFeature = (feature, layer) => {
+                    const name = feature.properties.adm3_en;
+                    const canonicalName = normalizeGeojsonName(name);
+                    const count = cityMap[canonicalName] || 0;
+
+                    // Popup
+                    const popupText = `<b>${canonicalName}</b><br>${count} member${count !== 1 ? 's' : ''}`;
+                    layer.bindPopup(popupText, { sticky: true });
+
+                    // Hover effects
+                    layer.on('mouseover', function() {
+                        this.setStyle({
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 1
+                        });
+                        lastLayer = this;
+                    });
+
+                    layer.on('mouseout', function() {
+                        mapInstance.resetStyle(this);
+                    });
+                };
+
+                // Add GeoJSON layer
+                L.geoJSON(geoJsonData, {
+                    style: style,
+                    onEachFeature: onEachFeature
+                }).addTo(mapInstance);
+
+                // Add legend
+                const legend = L.control({ position: 'bottomright' });
+                legend.onAdd = function(map) {
+                    const div = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
+                    div.style.backgroundColor = '#1e2435';
+                    div.style.borderColor = '#2c3647';
+                    div.style.color = '#e8eaed';
+                    div.style.padding = '10px';
+                    div.style.borderRadius = '4px';
+                    div.style.fontSize = '12px';
+                    div.style.border = '1px solid #2c3647';
+
+                    const title = document.createElement('div');
+                    title.style.fontWeight = '600';
+                    title.style.marginBottom = '8px';
+                    title.style.color = '#e8eaed';
+                    title.textContent = 'Member Count';
+                    div.appendChild(title);
+
+                    const minLabel = document.createElement('div');
+                    minLabel.style.marginBottom = '4px';
+                    minLabel.style.color = '#e8eaed';
+                    minLabel.textContent = `Min: ${minCount}`;
+                    div.appendChild(minLabel);
+
+                    const maxLabel = document.createElement('div');
+                    maxLabel.style.marginBottom = '4px';
+                    maxLabel.style.color = '#e8eaed';
+                    maxLabel.textContent = `Max: ${maxCount}`;
+                    div.appendChild(maxLabel);
+
+                    const noDataLabel = document.createElement('div');
+                    noDataLabel.style.fontSize = '11px';
+                    noDataLabel.style.color = '#9aa0a6';
+                    noDataLabel.textContent = '0 = No data';
+                    div.appendChild(noDataLabel);
+
+                    return div;
+                };
+                legend.addTo(mapInstance);
+
+                // Update legend content
+                const legendContent = document.getElementById('legendContent');
+                legendContent.innerHTML = `
+                    <div class="geo-legend-item">
+                        <div class="geo-legend-color" style="background-color: #1e293b;"></div>
+                        <span>No data (0 members)</span>
+                    </div>
+                    <div class="geo-legend-item">
+                        <div class="geo-legend-color" style="background-color: #1e3a8a;"></div>
+                        <span>Low (${minCount} members)</span>
+                    </div>
+                    <div class="geo-legend-item">
+                        <div class="geo-legend-color" style="background-color: #3b82f6;"></div>
+                        <span>Medium</span>
+                    </div>
+                    <div class="geo-legend-item">
+                        <div class="geo-legend-color" style="background-color: #93c5fd;"></div>
+                        <span>High (${maxCount} members)</span>
+                    </div>
+                `;
+
+                // Show unmatched locations warning
+                const unmatchedWarning = document.getElementById('unmatchedWarning');
+                if (unmatchedLocations.size > 0) {
+                    const distinctLocations = Array.from(unmatchedLocations).slice(0, 5).join(', ');
+                    const moreCount = unmatchedLocations.size > 5 ? ` and ${unmatchedLocations.size - 5} more` : '';
+                    unmatchedWarning.innerHTML = `
+                        <strong>⚠️ ${unmatchedLocations.size} unmatched location${unmatchedLocations.size !== 1 ? 's' : ''}:</strong><br>
+                        ${distinctLocations}${moreCount}
+                    `;
+                    unmatchedWarning.style.display = 'block';
+                } else {
+                    unmatchedWarning.style.display = 'none';
+                }
+
+                // Render top cities list
+                const topCitiesList = document.getElementById('topCitiesList');
+                const sortedCities = Object.entries(cityMap)
+                    .filter(([_, count]) => count > 0)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+
+                topCitiesList.innerHTML = sortedCities
+                    .map(([city, count]) => `
+                        <div class="geo-city-item">
+                            <span class="geo-city-name">${city}</span>
+                            <span class="geo-city-count">${count}</span>
+                        </div>
+                    `)
+                    .join('');
+
+                if (sortedCities.length === 0) {
+                    topCitiesList.innerHTML = '<div style="color: var(--text-secondary); font-size: 12px;">No data available</div>';
+                }
+
+            } catch (error) {
+                console.error('Error rendering geographic map:', error);
+                const mapContainer = document.getElementById('map');
+                mapContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--error);">Failed to load map data: ${error.message}</div>`;
+            }
+        }
+
+        /**
+         * Panel switching logic
+         */
+        function initPanelSwitching() {
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const panelName = this.getAttribute('data-panel');
+
+                    // Update nav active state
+                    navItems.forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Hide all panels
+                    const allPanels = document.querySelectorAll('.panel');
+                    allPanels.forEach(panel => panel.classList.remove('active'));
+
+                    // Show selected panel
+                    const targetPanel = document.getElementById(panelName + 'Panel');
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+        }
+
         // Load data on page load
-        window.addEventListener('load', loadData);
+        window.addEventListener('load', function() {
+            initPanelSwitching();
+            loadData();
+        });
     </script>
 </body>
 </html>

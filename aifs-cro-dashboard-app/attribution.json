@@ -1,0 +1,174 @@
+{
+  "asOf": "2026-07-27",
+  "coverageUtm": "285 of 299",
+  "coverageUtmPct": "95%",
+  "coverageFbc": "290 of 299",
+  "coverageFbcPct": "97%",
+  "sourceSplit": [
+    {
+      "k": "fb",
+      "v": 158
+    },
+    {
+      "k": "ig",
+      "v": 118
+    },
+    {
+      "k": "(none)",
+      "v": 14
+    },
+    {
+      "k": "an",
+      "v": 7
+    },
+    {
+      "k": "{{site_source_name}}",
+      "v": 1
+    },
+    {
+      "k": "th",
+      "v": 1
+    }
+  ],
+  "landingTop": [
+    {
+      "k": "go.aifundingsolutions.com/clinic",
+      "v": 185
+    },
+    {
+      "k": "go.aifundingsolutions.com/optin-med",
+      "v": 32
+    },
+    {
+      "k": "go.aifundingsolutions.com/medical",
+      "v": 26
+    },
+    {
+      "k": "go.aifundingsolutions.com/optin-page",
+      "v": 25
+    },
+    {
+      "k": "fund.eazeconsulting.com/medical",
+      "v": 22
+    },
+    {
+      "k": "fund.eazeconsulting.com/optin-page-4008",
+      "v": 2
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "120248304846100411",
+      "name": "Aashish Maru [Do Not Touch]| Medspa UGC Reels | CBO | Demographic | Scheduled",
+      "spend": "$6,015.47",
+      "impr": "43,263",
+      "clicks": "832",
+      "opps": 82,
+      "booked": 51,
+      "costPerOpp": "$73.36",
+      "won": 2,
+      "paidWon": 2,
+      "cash": "$5,994",
+      "roas": "1.00x"
+    },
+    {
+      "id": "120248175398410411",
+      "name": "AI Funding Solutions | Med Spa + Dental | ABO | Broad | Scheduled",
+      "spend": "$9,150.69",
+      "impr": "194,426",
+      "clicks": "2,161",
+      "opps": 85,
+      "booked": 43,
+      "costPerOpp": "$107.66",
+      "won": 5,
+      "paidWon": 4,
+      "cash": "$4,988",
+      "roas": "0.55x"
+    },
+    {
+      "id": "120248020479770411",
+      "name": "RPF 01 - Dentists - WV - Images",
+      "spend": "$1,433.02",
+      "impr": "22,593",
+      "clicks": "1,113",
+      "opps": 90,
+      "booked": 12,
+      "costPerOpp": "$15.92",
+      "won": 0,
+      "paidWon": 0,
+      "cash": "$0",
+      "roas": "n/a"
+    },
+    {
+      "id": "120248175348750411",
+      "name": "[AI Funding] RPF 01 - Derma - WV - Images",
+      "spend": "$472.61",
+      "impr": "7,166",
+      "clicks": "287",
+      "opps": 4,
+      "booked": 1,
+      "costPerOpp": "$118.15",
+      "won": 0,
+      "paidWon": 0,
+      "cash": "$0",
+      "roas": "n/a"
+    },
+    {
+      "id": "120247947363680411",
+      "name": "Warm Up",
+      "spend": "$122.42",
+      "impr": "2,706",
+      "clicks": "132",
+      "opps": 4,
+      "booked": 3,
+      "costPerOpp": "$30.61",
+      "won": 0,
+      "paidWon": 0,
+      "cash": "$0",
+      "roas": "n/a"
+    },
+    {
+      "id": "120246685751060411",
+      "name": "V3 | AI Funding Solutions: Med Spa",
+      "spend": "$119.88",
+      "impr": "1,156",
+      "clicks": "26",
+      "opps": 5,
+      "booked": 2,
+      "costPerOpp": "$23.98",
+      "won": 0,
+      "paidWon": 0,
+      "cash": "$0",
+      "roas": "n/a"
+    }
+  ],
+  "buckets": {
+    "mapped": 270,
+    "preRelaunch": 14,
+    "unmapped": 1,
+    "unattributed": 14
+  },
+  "totalOpps": 299,
+  "conventions": {
+    "distinct": 23,
+    "numeric": 7,
+    "named": 16
+  },
+  "sale": {
+    "name": "Arpan Patel - Deposit",
+    "cash": "$1,997",
+    "campaign": "AI Funding Solutions | Med Spa + Dental | ABO | Broad | Scheduled",
+    "campaignId": "Relaunch | Ai Funding Solutions | Med Spa + Dental | Abo | Broad | Scheduled - Copy",
+    "source": "fb",
+    "medium": "paid",
+    "referrer": "http://m.facebook.com",
+    "firstTouch": "https://go.aifundingsolutions.com/medical",
+    "lastTouch": "https://eazepay.io/success-call",
+    "content": "Pixel 1 |Ad set 4 | Dentists AI | USA | 25-64 | All Gender | excluded: Texas | V1 | AI Image 3 | Dentist",
+    "term": "120248881907640411",
+    "fbclid": "IwcGRvZgNmZGlkFlCqds...",
+    "fbp": "fb.1.1783862850132.673480488237614871",
+    "ip": "2600:4040:7bee:df00:548:49c4:441b:a32c",
+    "device": "iPhone, Instagram in-app browser"
+  }
+}

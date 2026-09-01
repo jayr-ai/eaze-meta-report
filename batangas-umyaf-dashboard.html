@@ -793,6 +793,7 @@
          * Build city count map from data, matching each location to canonical municipality
          */
         function buildCityCountMap() {
+            console.log('buildCityCountMap called with', allData.length, 'records');
             const cityMap = {};
             const unmatchedLocations = new Set();
 

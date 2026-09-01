@@ -1389,90 +1389,57 @@
         }
 
         /**
-         * Render geographic choropleth map
+         * Render geographic choropleth map - SIMPLIFIED VERSION
          */
         async function renderGeoMap() {
             try {
-                window.console.log('renderGeoMap: START');
-
-                // Build city count map from data
-                const { cityMap, unmatchedLocations } = buildCityCountMap();
-                window.console.log('renderGeoMap: cityMap built');
-
                 // Check if map element exists
                 const mapEl = document.getElementById('map');
-                if (!mapEl) {
-                  window.console.error('renderGeoMap: map element not found');
-                  return;
-                }
-                window.console.log('renderGeoMap: map element found');
+                if (!mapEl) return;
 
-                // Fetch and cache GeoJSON
-                const geoJsonData = await fetchGeojsonData();
-                window.console.log('renderGeoMap: GeoJSON fetched');
+                // Build city count map from data
+                const { cityMap } = buildCityCountMap();
 
-                // Calculate min/max for color interpolation (excluding 0)
-                const nonZeroCounts = Object.values(cityMap).filter(c => c > 0);
-                const minCount = nonZeroCounts.length > 0 ? Math.min(...nonZeroCounts) : 0;
-                const maxCount = Math.max(...Object.values(cityMap));
+                // Fetch GeoJSON
+                const response = await fetch('https://raw.githubusercontent.com/faeldon/philippines-json-maps/master/2023/geojson/provdists/lowres/municities-provdist-401000000.0.001.json');
+                const geoJsonData = await response.json();
 
-                // Destroy existing map instance if it exists
-                if (mapInstance) {
-                    mapInstance.remove();
-                    mapInstance = null;
-                }
+                // Min/max for colors
+                const counts = Object.values(cityMap);
+                const minCount = Math.min(...counts.filter(c => c > 0));
+                const maxCount = Math.max(...counts);
 
-                // Initialize map
-                mapInstance = L.map('map').setView([13.7563, 121.1785], 9); // Center of Batangas
+                // Remove old map if exists
+                if (mapInstance) mapInstance.remove();
 
-                // Style function for GeoJSON features
-                const style = (feature) => {
-                    const name = feature.properties.adm3_en;
-                    const canonicalName = normalizeGeojsonName(name);
-                    const count = cityMap[canonicalName] || 0;
+                // Create map
+                mapInstance = L.map('map').setView([13.7563, 121.1785], 9);
 
-                    const color = interpolateColor(count, minCount, maxCount);
+                // Add tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    maxZoom: 19
+                }).addTo(mapInstance);
 
-                    return {
-                        fillColor: color,
-                        weight: 1,
-                        opacity: 1,
-                        color: '#334155',
-                        fillOpacity: 0.85
-                    };
-                };
-
-                // Event handlers for hover effects
-                let lastLayer = null;
-
-                const onEachFeature = (feature, layer) => {
-                    const name = feature.properties.adm3_en;
-                    const canonicalName = normalizeGeojsonName(name);
-                    const count = cityMap[canonicalName] || 0;
-
-                    // Popup
-                    const popupText = `<b>${canonicalName}</b><br>${count} member${count !== 1 ? 's' : ''}`;
-                    layer.bindPopup(popupText, { sticky: true });
-
-                    // Hover effects
-                    layer.on('mouseover', function() {
-                        this.setStyle({
-                            weight: 2,
-                            opacity: 1,
-                            fillOpacity: 1
-                        });
-                        lastLayer = this;
-                    });
-
-                    layer.on('mouseout', function() {
-                        mapInstance.resetStyle(this);
-                    });
-                };
-
-                // Add GeoJSON layer
+                // Add GeoJSON with colors
                 L.geoJSON(geoJsonData, {
-                    style: style,
-                    onEachFeature: onEachFeature
+                    style: (feature) => {
+                        const name = normalizeGeojsonName(feature.properties.adm3_en);
+                        const count = cityMap[name] || 0;
+                        const color = interpolateColor(count, minCount, maxCount);
+                        return {
+                            fillColor: color,
+                            weight: 1,
+                            opacity: 1,
+                            color: '#334155',
+                            fillOpacity: 0.85
+                        };
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const name = normalizeGeojsonName(feature.properties.adm3_en);
+                        const count = cityMap[name] || 0;
+                        layer.bindPopup(`<b>${name}</b><br>${count} members`);
+                    }
                 }).addTo(mapInstance);
 
                 // Add legend

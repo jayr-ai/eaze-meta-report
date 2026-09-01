@@ -913,9 +913,7 @@
                 document.getElementById('chartsContainer').style.display = 'grid';
                 document.getElementById('bottomSection').style.display = 'grid';
 
-                // Render geographic map separately
-                console.log('CALLING renderGeoMap NOW');
-                renderGeoMap().catch(err => console.error('Map render error:', err));
+                // Map will be rendered on-demand when Geographic tab is clicked
 
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1389,39 +1387,47 @@
         }
 
         /**
-         * Render geographic choropleth map - SIMPLIFIED VERSION
+         * Render geographic choropleth map
          */
         async function renderGeoMap() {
             try {
-                // Check if map element exists
+                console.log('renderGeoMap starting...');
+
                 const mapEl = document.getElementById('map');
-                if (!mapEl) return;
+                if (!mapEl) {
+                    console.error('Map element not found');
+                    return;
+                }
 
-                // Build city count map from data
+                console.log('Building city map...');
                 const { cityMap } = buildCityCountMap();
+                console.log('City map built:', Object.keys(cityMap).length, 'cities');
 
-                // Fetch GeoJSON
+                console.log('Fetching GeoJSON...');
                 const response = await fetch('https://raw.githubusercontent.com/faeldon/philippines-json-maps/master/2023/geojson/provdists/lowres/municities-provdist-401000000.0.001.json');
                 const geoJsonData = await response.json();
+                console.log('GeoJSON loaded, features:', geoJsonData.features.length);
 
-                // Min/max for colors
-                const counts = Object.values(cityMap);
-                const minCount = Math.min(...counts.filter(c => c > 0));
+                const counts = Object.values(cityMap).filter(c => c > 0);
+                const minCount = Math.min(...counts);
                 const maxCount = Math.max(...counts);
+                console.log('Min:', minCount, 'Max:', maxCount);
 
-                // Remove old map if exists
-                if (mapInstance) mapInstance.remove();
+                if (mapInstance) {
+                    console.log('Removing old map instance');
+                    mapInstance.remove();
+                }
 
-                // Create map
+                console.log('Creating Leaflet map...');
                 mapInstance = L.map('map').setView([13.7563, 121.1785], 9);
 
-                // Add tile layer
+                console.log('Adding tile layer...');
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap',
                     maxZoom: 19
                 }).addTo(mapInstance);
 
-                // Add GeoJSON with colors
+                console.log('Adding GeoJSON layer...');
                 L.geoJSON(geoJsonData, {
                     style: (feature) => {
                         const name = normalizeGeojsonName(feature.properties.adm3_en);
@@ -1441,6 +1447,8 @@
                         layer.bindPopup(`<b>${name}</b><br>${count} members`);
                     }
                 }).addTo(mapInstance);
+
+                console.log('Map rendered successfully!');
 
                 // Add legend
                 const legend = L.control({ position: 'bottomright' });
@@ -1570,6 +1578,11 @@
                     const targetPanel = document.getElementById(panelName + 'Panel');
                     if (targetPanel) {
                         targetPanel.classList.add('active');
+                    }
+
+                    // Render map when Geographic panel is clicked
+                    if (panelName === 'geographic' && !mapInstance) {
+                        renderGeoMap().catch(err => console.error('Map error:', err));
                     }
                 });
             });

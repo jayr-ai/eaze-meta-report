@@ -1581,8 +1581,15 @@
                     }
 
                     // Render map when Geographic panel is clicked
-                    if (panelName === 'geographic' && !mapInstance) {
-                        renderGeoMap().catch(err => console.error('Map error:', err));
+                    console.log('Panel clicked:', panelName);
+                    if (panelName === 'geographic') {
+                        console.log('Geographic panel detected, calling renderGeoMap');
+                        renderGeoMap().then(() => {
+                            console.log('Map rendered successfully');
+                        }).catch(err => {
+                            console.error('Map error:', err);
+                            console.error('Error stack:', err.stack);
+                        });
                     }
                 });
             });

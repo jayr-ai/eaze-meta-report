@@ -1577,8 +1577,15 @@
 
         // Load data on page load
         window.addEventListener('load', function() {
+            console.log('PAGE LOADED');
             initPanelSwitching();
             loadData();
+
+            // Immediately try to render the map
+            setTimeout(() => {
+                console.log('TIMEOUT: Attempting renderGeoMap directly');
+                renderGeoMap().catch(e => console.error('renderGeoMap failed:', e));
+            }, 2000);
         });
     </script>
 </body>

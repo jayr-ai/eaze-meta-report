@@ -696,6 +696,7 @@
     </div>
 
     <script>
+        console.log('DASHBOARD SCRIPT LOADED');
         // Google Apps Script Web App endpoint with free CORS proxy (allorigins.win)
         const APPS_SCRIPT_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://script.googleapis.com/macros/s/AKfycbwZXHuu3B_OyEGGMS57_KOurq1s0moX7z3QnZ9LHMUg5m23ej5M6tlsT3-C-ioAhkUL/exec');
         const GEOJSON_URL = 'https://raw.githubusercontent.com/faeldon/philippines-json-maps/master/2023/geojson/provdists/lowres/municities-provdist-401000000.0.001.json';
@@ -913,6 +914,7 @@
                 document.getElementById('bottomSection').style.display = 'grid';
 
                 // Render geographic map separately
+                console.log('CALLING renderGeoMap NOW');
                 renderGeoMap().catch(err => console.error('Map render error:', err));
 
             } catch (error) {

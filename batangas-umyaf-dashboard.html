@@ -907,13 +907,13 @@
                 });
 
                 // Render dashboard
-                console.log('Rendering KPIs and charts...');
                 renderKPIs();
-                console.log('About to call renderCharts()');
-                await renderCharts();
-                console.log('renderCharts() completed');
+                renderCharts();
                 document.getElementById('chartsContainer').style.display = 'grid';
                 document.getElementById('bottomSection').style.display = 'grid';
+
+                // Render geographic map separately
+                renderGeoMap().catch(err => console.error('Map render error:', err));
 
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1062,8 +1062,7 @@
             };
         }
 
-        async function renderCharts() {
-            window.console.log('renderCharts() START');
+        function renderCharts() {
             // Status Chart
             renderStatusChart();
             renderCivilChart();
@@ -1073,7 +1072,7 @@
             renderChurchChart();
             renderSummary();
             renderMap();
-            await renderGeoMap(); // New geographic choropleth map
+            // renderGeoMap will be called separately
         }
 
         function renderStatusChart() {
